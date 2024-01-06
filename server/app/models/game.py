@@ -1,6 +1,6 @@
-from app.models.bag import Bag
-from app.models.board import GameBoard
-from app.models.player import Player
+from server.app.models.bag import Bag
+from server.app.models.board import GameBoard
+from server.app.models.player import Player
 
 
 class Game:

@@ -1,7 +1,7 @@
 import random
 import bag
-from app.models.move import Move
-from app.models.tile import Tile
+from server.app.models.move import Move
+from server.app.models.tile import Tile
 
 
 class Player:

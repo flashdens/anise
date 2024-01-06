@@ -1,4 +1,4 @@
-from app.models.tile import Tile
+from server.app.models.tile import Tile
 
 
 class Move:
