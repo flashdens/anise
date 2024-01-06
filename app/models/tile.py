@@ -6,7 +6,6 @@ class Tile:
 
     def __repr__(self):
 
-
         build_me = ""
 
         """
