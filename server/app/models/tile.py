@@ -36,26 +36,25 @@ class Tile:
             case 5:
                 build_me += '\033[96m'
 
-        match self.symbol:
-            case 0:
-                build_me += '●'
+            # case 0:
+            #     build_me += '●'
+            #
+            # case 1:
+            #     build_me += '■'
+            #
+            # case 2:
+            #     build_me += '◆'
+            #
+            # case 3:
+            #     build_me += '★'
+            #
+            # case 4:
+            #     build_me += '☘'
+            #
+            # case 5:
+            #     build_me += '✘'
 
-            case 1:
-                build_me += '■'
-
-            case 2:
-                build_me += '◆'
-
-            case 3:
-                build_me += '★'
-
-            case 4:
-                build_me += '☘'
-
-            case 5:
-                build_me += '✘'
-
-        build_me += '\033[0m' # reset color
+        build_me += self.symbol + '\033[0m'  # reset color
 
         return build_me
 
