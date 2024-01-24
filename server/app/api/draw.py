@@ -1,11 +1,8 @@
-from flask import Blueprint, jsonify
-from __main__ import blueprints
-
-test_blueprint = Blueprint('draw', __name__)
-blueprints.append(test_blueprint)
+from flask import jsonify
+from __main__ import app
 
 
-@test_blueprint.route('/api/draw', methods=['GET'])
+@app.route('/api/draw', methods=['GET'])
 def test():
     tiles = [
         {"symbol": "A", "color": "yellow", "id": 1},
