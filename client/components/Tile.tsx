@@ -6,26 +6,32 @@ export interface ITile  {
     id: number
 }
 
-const Tile = ({tile, onDragStart, onDragOver, onDrop, isOnRack, i, extraStyles} : {tile? : ITile|undefined, onDragStart : any, onDragOver?: any, onDrop: any, isOnRack: boolean, x?: number, y?: number, i?: number, extraStyles?: string}) => {
+interface TileProps {
+    tile? : ITile,
+    draggable: boolean,
+    onDragStart: (e: any, tile: ITile) => any,
+    onDragOver: (e: any) => void,
+    onDrop: (e: any, tile: ITile | undefined) => any,
+    isOnRack: boolean,
+    i?: number,
+    extraStyles?: string
+}
 
-   const draggableProps = isOnRack ? { // TODO wtf is this
-         draggable: true,
-         onDragStart: (e: any) => onDragStart(e, tile),
-         onDragOver: onDragOver,
-         onDrop: (e: any) => onDrop(e, tile)
-   } : {
-       onDragOver: onDragOver,
-       onDrop: (e: any) => onDrop(e, tile)
-   };
-
-   extraStyles = `${extraStyles} ${isOnRack ? "h-8 w-8" : ""}`;
+const Tile: React.FC<TileProps> = (props: TileProps) => {
     return (
         <div
-            {...draggableProps}
-            i = {i}
-            className={`flex border border-gray-200 aspect-square justify-center text-center text-${tile ? tile.color : ''}-500 ${extraStyles} select-none`}
+            draggable={props.draggable || props.isOnRack}
+            onDragStart={(e: any) => props.onDragStart(e, props.tile)}
+            onDragOver={(e: any) => props.onDragOver(e)}
+            onDrop={(e: any) => props.onDrop(e, props.tile)}
+            i = {props.i}
+            className={
+            `flex border border-gray-200 aspect-square justify-center align-center text-center 
+            text-${props.tile?.color != undefined ? props.tile.color : 'white'}-500 
+            ${props.extraStyles} 
+            select-none`}
         >
-            {tile?.symbol ? tile.symbol : i}
+            {props.tile?.symbol ? props.tile.symbol : props.i}
         </div>
     )
 };

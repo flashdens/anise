@@ -1,11 +1,16 @@
 import React, {useState, useEffect} from "react";
 
-import BoardContainer from "@/components/board/BoardContainer";
+import BoardContainer, {IMove} from "@/components/board/BoardContainer";
 import Rack from "@/components/rack/Rack";
-import {ITile} from "@/components/rack/Tile";
+import Navbar from '@/components/navbar/Navbar'
+import Scoreboard from '@/components/scoreboard/Scoreboard'
 
-const index = () => {
-    const [tiles, setTiles] = useState<ITile[]>([]);
+import {ITile} from "@/components/Tile";
+
+
+
+const Index = () => {
+    const [playerTiles, setPlayerTiles] = useState<ITile[]>([]);
     useEffect(() => {
         fetch("http://localhost:8080/api/draw")
             .then((response: Response) => {
@@ -15,21 +20,32 @@ const index = () => {
                 return response.json();
             })
             .then((data: ITile[]) => {
-                setTiles(data);
+                setPlayerTiles(data);
             })
             .catch((error: Error) => {
                 console.error('Error - ', error)
             });
     }, []);
-    console.log(tiles);
-    return (
-        <>
-            <h1 className={"text-orange-800"}>HEJ</h1>
-            <BoardContainer />
 
-            <Rack initTiles={tiles}/>
-        </>
+
+    const [move, setMove] = useState<IMove[]>([]);
+    const [dragged, setDragged] = useState<ITile|null>(null);
+    const [rackTiles, setRackTiles] = useState<ITile[]>(playerTiles);
+
+
+    useEffect(() => { // todo
+        setRackTiles(playerTiles)
+    }, [playerTiles]);
+    return (
+        <div className={"root"}>
+            <Navbar/>
+            <div className={"flex flex-row"}>
+            <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles}/>
+            <Scoreboard/>
+            </div>
+            <Rack initTiles={playerTiles} move={move} setMove={setMove} dragged={dragged} setDragged={setDragged} rackTiles={rackTiles} setRackTiles={setRackTiles}/>
+        </div>
     );
 };
 
-export default index;
+export default Index;
