@@ -1,4 +1,4 @@
-import PlayerContainer from '@/components/scoreboard/PlayerContainer';
+import PlayerContainer from '@/components/game/scoreboard/PlayerContainer';
 
 const Scoreboard = () => {
     const renderScoreboard = () => {

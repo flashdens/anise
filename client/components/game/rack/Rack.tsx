@@ -1,9 +1,9 @@
-import Tile, {ITile} from "@/components/Tile";
+import Tile, {ITile} from "@/components/game/Tile";
 import React, {Dispatch, useState} from "react";
-import SubmitMoveButton from "@/components/rack/move_buttons/SubmitMoveButton";
-import {IMove} from "@/components/board/BoardContainer";
-import ResetMoveButton from "@/components/rack/move_buttons/ResetMoveButton";
-import Image from "next/image";
+import SubmitMoveButton from "@/components/game/rack/buttons/SubmitMoveButton";
+import {IMove} from "@/components/game/board/BoardContainer";
+import ResetMoveButton from "@/components/game/rack/buttons/ResetMoveButton";
+import RackVisibilityButton from "@/components/game/rack/buttons/RackVisibilityButton";
 interface RackProps {
     initTiles: ITile[],
     move: IMove[]
@@ -54,19 +54,15 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
 
     return (
         <div className={"container"}>
-          <button
-            onClick={changeRackVisibility}
-            className={`fixed bottom-16 left-1/2 -translate-x-1/2 px-4 py-2 text-xs bg-white border text-white rounded`}
-          >
-            <Image src='/buttons/up-arrow.svg' alt='Toggle Rack' height={20} width={20} className={`${isRackVisible ? '' : 'animate-flip fill-mode-forwards' }`}/>
-          </button>
+            <RackVisibilityButton changeRackVisibility={changeRackVisibility} isRackVisible={isRackVisible}/>
            { isRackVisible &&
             <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 transition-all duration-500 "
             style={{pointerEvents: isRackVisible ? 'all' : 'none'}}>
-                <div className="rack inline-flex space-x-1.5 bg-white p-6 shadow-md rounded-lg">
+                <div className="rack inline-flex space-x-1.5 border p-6 shadow-md rounded-lg">
                     <ResetMoveButton move={props.move} setMove={props.setMove}/>
                     {props.rackTiles.map((tile, index) => (
                         <Tile
+                            draggable={true}
                             key={index}
                             tile={tile}
                             onDragStart={onDragStart}

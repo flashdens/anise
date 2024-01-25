@@ -1,13 +1,11 @@
 import React, {useState, useEffect} from "react";
 
-import BoardContainer, {IMove} from "@/components/board/BoardContainer";
-import Rack from "@/components/rack/Rack";
+import BoardContainer, {IMove} from "@/components/game/board/BoardContainer";
+import Rack from "@/components/game/rack/Rack";
 import Navbar from '@/components/navbar/Navbar'
-import Scoreboard from '@/components/scoreboard/Scoreboard'
+import Scoreboard from '@/components/game/scoreboard/Scoreboard'
 
-import {ITile} from "@/components/Tile";
-
-
+import {ITile} from "@/components/game/Tile";
 
 const Index = () => {
     const [playerTiles, setPlayerTiles] = useState<ITile[]>([]);
@@ -38,7 +36,7 @@ const Index = () => {
     }, [playerTiles]);
     return (
         <div className={"root"}>
-            <Navbar/>
+
             <div className={"flex flex-row"}>
             <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles}/>
             <Scoreboard/>

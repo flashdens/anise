@@ -6,6 +6,7 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   plugins: [
     require("tailwindcss-animate"),
   ],
@@ -31,11 +32,8 @@ const config: Config = {
         flip: 'flip 0.5s ease-in-out',
       },
     },
-
   },
-
   purge: {
-      // other purge configurations...
       safelist: [
         'text-red-500', 'text-orange-500', 'text-yellow-500',
         'text-green-500', 'text-blue-500', 'text-indigo-500', 'text-purple-500',
@@ -44,9 +42,8 @@ const config: Config = {
         'opacity-0',
         'duration-500',
         'pointer-events-none',
-        // Add other colors and shades as needed
       ],
-    }
+    },
 };
 
 export default config;

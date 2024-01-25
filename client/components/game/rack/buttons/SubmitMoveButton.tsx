@@ -1,5 +1,5 @@
 import React from "react";
-import {IMove} from "@/components/board/BoardContainer";
+import {IMove} from "@/components/game/board/BoardContainer";
 
 interface SubmitMoveButtonProps {
     move: IMove[]
@@ -31,7 +31,7 @@ const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButt
        )};
 
    return (
-       <button className={"px-4 py-1 text-xs transition-colors duration-300 rounded-full shadow-xl text-emerald-100 bg-emerald-500 hover:bg-emerald-600 shadow-emerald-100"}
+       <button className={"px-4 py-1 text-xs transition-colors duration-300 rounded-full shadow-xl text-emerald-100 bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200 dark:shadow-none"}
        onClick={() => submitMove(props.move)}>
            submit move
        </button>

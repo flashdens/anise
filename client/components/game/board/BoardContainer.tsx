@@ -5,8 +5,8 @@
 
 import React, {Dispatch, useEffect, useState} from "react";
 
-import Tile, {ITile} from "@/components/Tile";
-import BoardNavbar from "@/components/board/BoardNavbar";
+import Tile, {ITile} from "@/components/game/Tile";
+import BoardNavbar from "@/components/game/board/BoardNavbar";
 import assert from "assert";
 
 export interface IMove {
@@ -159,7 +159,7 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
 
   return (
       <div className="flex p-6 items-center h-screen w-[80%]">
-          <div className={"board-navbar"}>
+          <div className={"board-navbar hidden"}>
             <BoardNavbar
                 onCenter={centerBoard}
                 onZoomIn={zoomIn}
