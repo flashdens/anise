@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import {ITile} from "@/components/game/Tile";
 import LobbyListEntry from "@/components/lobby_list/LobbyListEntry";
 import NewLobbyButton from "@/components/welcome_screen/NewLobbyButton";
@@ -15,13 +15,12 @@ const LobbyList = () => {
                    return response.json();
                })
                .then((data) => {
-                   console.log(data)
                    setLobbies(data);
-                   console.log(lobbies)
                })
                .catch((error: Error) => {
                    console.error('Error - ', error)
                });
+           console.log(lobbies)
        }, []);
 
     return (
@@ -29,7 +28,7 @@ const LobbyList = () => {
             <h2>available lobbies:</h2>
             <ul>
                 {lobbies.map((lobby) => (
-                <LobbyListEntry key={lobby} lobby={lobby}/>
+                <LobbyListEntry key={lobby.id} lobby={lobby}/>
             ))}
             </ul>
             <NewLobbyButton/>

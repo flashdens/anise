@@ -9,24 +9,21 @@ const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButt
 
    const submitMove = (move: IMove[]) => {
         console.log(move);
-        console.log("todo: this button will be used to submit moves.");
 
-        fetch("http://localhost:8080/api/receive_move",
+        fetch("http://localhost:8080/api/game/send_move/lobby/1/player/1",
             {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(move)
+                body: JSON.stringify({"move": move, playerName: "miloszek"})
             })
             .then((response: Response) => {
                 if (!response.ok) {
                     throw new Error("error fetching response");
                 }
-                console.log("The request returned: " + response.status);
                 return response.json();
             }).then((data: string) => {
-                console.log("Data received: " + JSON.stringify(data));
        }
        )};
 
