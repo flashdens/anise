@@ -1,8 +1,8 @@
-from server.app.models.tile import Tile
+from server.app.models.game.tile import Tile
 
 
 class Bag:
     def __init__(self):
-        self.content = [(Tile(i, j)) for i in range(6) for j in range(6) for _ in range(3)]
+        self.content = [(Tile(i, j, i*j)) for i in range(6) for j in range(6) for k in range(3)]
 
 

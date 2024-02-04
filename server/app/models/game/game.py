@@ -1,20 +1,31 @@
-from server.app.models.bag import Bag
-from server.app.models.board import GameBoard
-from server.app.models.player import Player
+from enum import Enum
+
+from server.app.models.game.bag import Bag
+from server.app.models.game.board import GameBoard
+from server.app.models.game.move import Move
+from server.app.models.game.player import Player
+
+
+class Status(Enum):
+    WAITING_FOR_START = 1
+    IN_PROGRESS = 2,
+    FINISHED = 3
+
+
+class GameState:
+    def __init__(self):
+        self.player_turn = None
+        self.status = Status.WAITING_FOR_START
 
 
 class Game:
-    def __init__(self, players: list[Player]):
-        self.players = players
+    def __init__(self, lobby):
+        self.players = lobby.players
         self.board = GameBoard()
         self.bag = Bag()
+        self.game_state = GameState()
 
-    def start_game(self):
-        for player in self.players:
-            for _ in range(6):
-                player.draw_tile(self.bag)
-
-    def game_over(self) -> bool:
+    def game_over(self):
         if self.bag.content != 0:
             return False
 
@@ -22,13 +33,32 @@ class Game:
             if len(player.rack) != 0:
                 return False
 
-        return True
+        self.game_state = Status.FINISHED
+
+    def start_game(self):
+        self.game_state.player_turn = 1
+        for player in self.players:
+            for _ in range(6):
+                player.draw_tile(self.bag)
+
+    def process_move(self, received_move):
+        move = Move(received_move)
+
+        if not Move.is_combination_valid(move, move.move):
+            return {"message": "invalid move!"}, 0
+
+        Move.construct_move(move, received_move)
+        message, move_score = self.board.calculate_points(move)
+
+        if move_score == 0:
+            return message, False
+        else:
+            self.board.make_move(move)
+            return message, move_score
 
 
-    def game_loop(self): # todo wtf is that name
 
+    def game_loop(self):  # todo wtf is that name
         while not self.game_over():
             for player in self.players:
                 player.make_move()
-
-

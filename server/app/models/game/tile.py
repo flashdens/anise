@@ -1,8 +1,12 @@
 class Tile:
 
-    def __init__(self, color=None, symbol=None):
+    def __init__(self, color, symbol, id):
         self.color = color
         self.symbol = symbol
+        self.id = id
+
+    possible_symbols = ['●', '■', '◆', '★', '☘', '✘']
+    possible_colors = ['red', 'green', 'yellow', 'blue', 'purple', 'cyan']
 
     def __repr__(self):
 
@@ -57,4 +61,3 @@ class Tile:
         build_me += self.symbol + '\033[0m'  # reset color
 
         return build_me
-
