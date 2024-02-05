@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, session
 from __main__ import app
 from server.app.models.lobby.lobby import lobbies
 

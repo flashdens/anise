@@ -14,8 +14,8 @@ class Status(Enum):
 
 class GameState:
     def __init__(self):
-        self.player_turn = None
-        self.status = Status.WAITING_FOR_START
+        self.player_turn = 0
+        self.game_status = Status.WAITING_FOR_START
 
 
 class Game:
@@ -35,6 +35,12 @@ class Game:
 
         self.game_state = Status.FINISHED
 
+    def find_player_index(self, request_player_name):
+        for i, player in enumerate(self.players):
+            if player.name == request_player_name:
+                return i
+        return -1
+
     def start_game(self):
         self.game_state.player_turn = 1
         for player in self.players:
@@ -43,19 +49,18 @@ class Game:
 
     def process_move(self, received_move):
         move = Move(received_move)
+        Move.construct_move(move, received_move)
 
         if not Move.is_combination_valid(move, move.move):
             return {"message": "invalid move!"}, 0
 
-        Move.construct_move(move, received_move)
-        message, move_score = self.board.calculate_points(move)
+        message, move_score = self.board.calculate_points(move.move)
 
         if move_score == 0:
             return message, False
         else:
-            self.board.make_move(move)
+            self.board.make_move(move.move)
             return message, move_score
-
 
 
     def game_loop(self):  # todo wtf is that name

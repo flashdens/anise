@@ -3,11 +3,11 @@ from __main__ import app
 from server.app.models.lobby.lobby import lobbies
 
 
-@app.route('/api/game/<int:lobby_id>/tiles/<int:player_id>/', methods=['GET'])
-def test(lobby_id, player_id):
+@app.route('/api/game/<int:lobby_id>/get_tiles/<int:player_id>/', methods=['GET'])
+def get_tiles(lobby_id, player_id):
     game = next((lobby.game for lobby in lobbies if lobby.id == lobby_id), None)
 
-    if game.status != 2:
+    if game.game_state.game_status != 2:
         return jsonify({'message': 'game is not running!'}), 400
 
     player = game.players[player_id - 1]
@@ -17,4 +17,4 @@ def test(lobby_id, player_id):
         player.draw_tile(game.bag)
 
     print(player.rack)
-    return jsonify(player.rack)
+    return jsonify(player.rack_to_dict())

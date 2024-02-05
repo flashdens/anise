@@ -12,12 +12,13 @@ class Move:
             i = int(tile['i'])
             y = tile['i'] // BOARD_SIZE
             x = i - y * BOARD_SIZE
-            self.move[(x, y)] = Tile(tile['color'], tile['symbol'], tile['id'])
+            self.move[(x, y)] = Tile(tile['tile']['color'], tile['tile']['symbol'], tile['tile']['id'])
 
     def is_combination_valid(self, move):
-        colors = {val['color'] for val in move.values()}
-        symbols = {val['symbol'] for val in move.values()}
+        print(move)
+        colors = {tile.color for tile in move.values()}
+        symbols = {tile.symbol for tile in move.values()}
 
-        self.is_move_valid = True if len(colors) == 1 or len(symbols) == 1 else False
+        self.is_move_valid = (len(colors) == 1 or len(symbols) == 1)
         return self.is_move_valid
 

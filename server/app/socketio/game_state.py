@@ -1,8 +1,8 @@
-from __main__ import socketio, app
+from __main__ import socketio
 from server.app.models.lobby.lobby import lobbies
 from flask_socketio import emit
 
-@socketio.on('game_state')
-def change_board_state(lobby_id):
-
-    socketio.emit()
+def update_client_game_state(board):
+    board_state = [[tile.to_dict() if tile else None for tile in row] for row in board]
+    print("ok")
+    socketio.emit('board_state', board_state)

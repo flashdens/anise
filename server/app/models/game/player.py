@@ -12,13 +12,17 @@ class Player:
         self.rack = []
 
     def draw_tile(self, bag):
-        self.rack.append(random.choice(bag.content.pop()))
+        self.rack.append(bag.content.pop())
+
+
+    def rack_to_dict(self):
+        return [tile.to_dict() for tile in self.rack]
+
 
     def to_dict(self):
         return {
             'name': self.name,
-            'score': self.score,
-            'rack': self.rack,
+            'score': self.score
         }
 
 

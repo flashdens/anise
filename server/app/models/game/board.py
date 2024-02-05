@@ -6,7 +6,7 @@ BOARD_SIZE = 51
 class GameBoard:
 
     def __init__(self):
-        self.board = []
+        self.board = [[None for _ in range(50)] for _ in range(50)]
 
     def get_tile(self, row: int, col: int) -> Tile:
         return self.board[row][col].get()
@@ -22,12 +22,12 @@ class GameBoard:
         first_tile_row = first_tile[0][0]
         first_tile_col = first_tile[0][1]
 
-        last_tile_row = first_tile[1][0]
-        last_tile_col = first_tile[1][1]
+        last_tile_row = last_tile[0][0]
+        last_tile_col = last_tile[0][1]
 
         # check if the move is a line
         if abs(last_tile_row - first_tile_row) not in (0, len(move) - 1) \
-                or abs(last_tile_col - first_tile_col) not in (0, len(move) - 1):
+                and abs(last_tile_col - first_tile_col) not in (0, len(move) - 1):
             return {'message': 'The move must be a vertical or horizontal line!'}, 0
 
         # check if tiles were placed near non-matching tiles
@@ -36,7 +36,7 @@ class GameBoard:
             local_count = 1
 
             for dir in dirs:
-                checked_x, checked_y = coords + dir
+                checked_x, checked_y = coords[0] + dir[0], coords[1] + dir[1]
 
                 # don't check tiles which are a part of a move
                 if (checked_x, checked_y) in move:
@@ -66,6 +66,8 @@ class GameBoard:
                     while self.board[checked_x][checked_y] is not None:
                         checked_x, checked_y = checked_x + dir[0], checked_y + dir[1]
 
+                        if checked_x < 0 or checked_x > BOARD_SIZE or checked_y < 0 or checked_y > BOARD_SIZE:
+                            continue
                         # completely different tile
                         if self.board[checked_x][checked_y].color != tile.color \
                                 and self.board[checked_x][checked_y].symbol != tile.symbol:
@@ -89,6 +91,6 @@ class GameBoard:
         return {'message': 'It works!'}, score
 
     def make_move(self, move):
-        for tile in move:
-            row, col = move.keys()[move.values().index(tile)]
-            self.place_tile(tile, row, col)
+        for key, value in move.items():
+            row, col = key[0], key[1]
+            self.place_tile(value, row, col)

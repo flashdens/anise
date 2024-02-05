@@ -1,7 +1,7 @@
 from flask import jsonify, request, session
 from __main__ import app
 from server.app.models.lobby.lobby import Lobby, lobbies
-
+from server.app.models.game.player import Player
 
 @app.route('/api/lobby/create', methods=['POST'])
 def create_lobby():
@@ -13,6 +13,8 @@ def create_lobby():
     new_lobby = Lobby(name=name, host=host)
     session.permanent = True
     session['player_name'] = host
+    new_lobby.players.append(Player(host))
     lobbies.append(new_lobby)
+
     print(lobbies)
-    return jsonify({"message": "done"}), 200
+    return jsonify({"lobby_id": new_lobby.id}), 200
