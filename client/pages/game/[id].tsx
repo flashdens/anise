@@ -26,16 +26,26 @@ const Index = () => {
     const router = useRouter();
     const lobbyId = router.query.id as string;
     const playerName = typeof window !== 'undefined' ? localStorage.getItem('playerName') : null;
+    const [playerTurn, setPlayerTurn] = useState(false)
+    let playerId: number;
+    let currentTurnOf;
 
-    const resetMove = () => {
-        setRackTiles(prevRackTiles => {
-            const moveTiles = move.map(m => m.tile);
-            return prevRackTiles.concat(moveTiles);
-        });
+        const resetMove = (move: IMove[], setMove: Dispatch<SetStateAction<IMove[]>>, setRackTiles: Dispatch<SetStateAction<ITile[]>>, setBoardSquares: Dispatch<SetStateAction<(ITile | undefined)[]>>) => {
+            setRackTiles(prevRackTiles => {
+                const moveTiles = move.map(m => m.tile);
+                return prevRackTiles.concat(moveTiles);
+            });
 
+            setBoardSquares(prevBoardSquares => {
+                return prevBoardSquares.map((square, index) => {
+                    if (move.some(m => m.i === index)) {
+                        return undefined;
+                    }
+                    return square;
+                });
+            });
 
-
-        setMove([]);
+            setMove([]);
     };
 
         useEffect(() => {
@@ -55,7 +65,7 @@ const Index = () => {
                 .then(data => {
                     setLobby(data);
 
-                    const playerId = data.players.findIndex(p => p.name === playerName);
+                    playerId = data.players.findIndex(p => p.name === playerName);
 
                     if (playerId === -1)
                         throw new Error("Player not found in lobby");
@@ -73,6 +83,23 @@ const Index = () => {
     }, [lobbyId, playerName])
 
 
+    useEffect(() => {
+        const handleGameState = (player_turn) => {
+            currentTurnOf = player_turn;
+            if (player_turn === playerId) {
+                setPlayerTurn(true);
+            } else {
+                setPlayerTurn(false);
+            }
+        };
+
+        socket.on('game_state', handleGameState);
+
+        return () => {
+            socket.off('game_state', handleGameState);
+        };
+    }, [playerId]);
+
 
     const [move, setMove] = useState<IMove[]>([]);
     const [dragged, setDragged] = useState<ITile | null>(null);
@@ -80,9 +107,9 @@ const Index = () => {
         <div className={"root"}>
             <div className={"flex flex-row"}>
                 <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles} boardSquares={boardSquares} setBoardSquares={setBoardSquares}/>
-                {lobby ? <Scoreboard lobby={lobby}/> : <div>Loading...</div>}
+                {lobby ? <Scoreboard lobby={lobby} currentTurnOf={currentTurnOf}/> : <div>Loading...</div>}
             </div>
-            <Rack move={move} setMove={setMove} dragged={dragged} setDragged={setDragged} rackTiles={rackTiles} setRackTiles={setRackTiles} setBoardSquares={setBoardSquares} resetMove={resetMove} lobby={lobby}/>
+            <Rack move={move} setMove={setMove} dragged={dragged} setDragged={setDragged} rackTiles={rackTiles} setRackTiles={setRackTiles} setBoardSquares={setBoardSquares} resetMove={resetMove} playerTurn={playerTurn} lobby={lobby}/>
         </div>
     );
 };

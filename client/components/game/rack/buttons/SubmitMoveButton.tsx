@@ -2,12 +2,12 @@ import React from "react";
 import {IMove} from "@/components/game/board/BoardContainer";
 import {IPlayer} from "@/pages/game/[id]";
 import {Simulate} from "react-dom/test-utils";
-import io from "socket.io-client";
-const socket = io('http://localhost:8080'); // todo change me on wierzba
+import {object} from "prop-types";
 
 interface SubmitMoveButtonProps {
     move: IMove[],
-    resetMove: any
+    resetMove: any,
+    playerMove: boolean
 }
 
 const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButtonProps) => {
@@ -25,14 +25,15 @@ const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButt
             .then(async (response: Response) => {
                 if (!response.ok) {
                     const json = await response.json();
-                    throw new Error(json.message || "Unknown error occurred");
+                    props.resetMove();
                 }
                 return response.json();
             }
        )};
 
    return (
-       <button className={"px-4 py-1 text-xs transition-colors duration-300 rounded-full shadow-xl text-emerald-100 bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200 dark:shadow-none"}
+       <button className={`px-4 py-1 text-xs transition-colors duration-300 rounded-full shadow-xl text-emerald-100 bg-emerald-500 hover:bg-emerald-600 shadow-emerald-200 
+       ${props.playerMove ? '' : 'cursor-not-allowed'} disabled:bg-green-200 dark:shadow-none`}
        onClick={() => submitMove(props.move)}>
            submit move
        </button>

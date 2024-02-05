@@ -3,7 +3,8 @@ import {ILobby, IPlayer} from "@/pages/game/[id]";
 import {ReactElement} from "react";
 
 interface ScoreboardProps{
-    lobby: ILobby
+    lobby: ILobby,
+    currentTurnOf: number
 }
 const Scoreboard = (props: ScoreboardProps) => {
     const renderScoreboard = () => {
@@ -14,6 +15,7 @@ const Scoreboard = (props: ScoreboardProps) => {
                         <PlayerContainer
                             key={i}
                             player={props.lobby.players[i]}
+                            currentlyPlaying={props.currentTurnOf == i + 1}
                         />
             )
         }

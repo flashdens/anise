@@ -1,7 +1,8 @@
 import {IPlayer} from "@/pages/game/[id]";
 
 interface PlayerContainerProps {
-    player: IPlayer
+    player: IPlayer,
+    currentlyPlaying: boolean
 }
 
 
@@ -9,7 +10,7 @@ const PlayerContainer = (props: PlayerContainerProps) => {
 
 
     return (
-        <div className={"py-4 justify-center text-center"}>
+        <div className={`py-4 justify-center text-center ${props.currentlyPlaying ? "border-violet-400" : ""}`}>
             <img
                 className={"border border-white"}
                 src="/game/avatars/avatar1.jpg"

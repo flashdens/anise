@@ -14,7 +14,8 @@ interface RackProps {
     setRackTiles: React.Dispatch<React.SetStateAction<ITile[]>>,
     setBoardSquares: any
     lobby: ILobby,
-    resetMove: any
+    resetMove: any,
+    playerTurn: boolean
 }
 
 export const Rack: React.FC<RackProps> = (props: RackProps) => {
@@ -25,6 +26,9 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
     }
 
     const onDragStart = (e: any, tile: ITile) => {
+        if (!props.playerTurn)
+            return;
+
         props.setDragged(tile);
         e.dataTransfer.setData("draggedTile", JSON.stringify({tile: tile}));
     }
@@ -62,7 +66,7 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
             <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 transition-all duration-500 "
             style={{pointerEvents: isRackVisible ? 'all' : 'none'}}>
                 <div className="rack inline-flex space-x-1.5 border p-6 shadow-md rounded-lg">
-                    <ResetMoveButton resetMove={props.resetMove}/>
+                    <ResetMoveButton resetMove={props.resetMove} playerMove={props.playerTurn}/>
                     {props.rackTiles.map((tile, index) => (
                         <Tile
                             draggable={true}
@@ -75,7 +79,7 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
                             extraStyles={'h-8 w-8'}
                         />
                     ))}
-                    <SubmitMoveButton move={props.move} resetMove={props.resetMove}/>
+                    <SubmitMoveButton move={props.move} resetMove={props.resetMove} playerMove={props.playerTurn}/>
                 </div>
             </div>
            }

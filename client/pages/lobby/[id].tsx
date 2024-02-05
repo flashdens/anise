@@ -4,7 +4,6 @@ import Head from 'next/head';
 import LobbyScreen from "@/components/lobby/LobbyScreen";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import {Simulate} from "react-dom/test-utils";
 import {useRouter} from "next/router";
 
 interface ILobby {
