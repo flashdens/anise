@@ -1,24 +1,27 @@
 import PlayerContainer from '@/components/game/scoreboard/PlayerContainer';
+import {ILobby, IPlayer} from "@/pages/game/[id]";
+import {ReactElement} from "react";
 
-const Scoreboard = () => {
+interface ScoreboardProps{
+    lobby: ILobby
+}
+const Scoreboard = (props: ScoreboardProps) => {
     const renderScoreboard = () => {
-        const players: any[] = [];
-        for (let i: number = 0; i < 4; ++i) {
+        props.lobby
+        const players: ReactElement[] = [];
+        for (let i: number = 0; i < props.lobby.players.length; ++i) {
             players.push(
-                <>
-                    {
                         <PlayerContainer
-                        key={i}
+                            key={i}
+                            player={props.lobby.players[i]}
                         />
-                    }
-                </>
             )
         }
             return players;
 }
 
     return (
-        <div className={"scoreboard"}>
+        <div className={"scoreboard flex-col"}>
         {renderScoreboard()}
         </div>
     );

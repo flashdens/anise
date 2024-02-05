@@ -8,42 +8,82 @@ import React, {Dispatch, useEffect, useState} from "react";
 import Tile, {ITile} from "@/components/game/Tile";
 import BoardNavbar from "@/components/game/board/BoardNavbar";
 import assert from "assert";
+import io from "socket.io-client";
+const socket = io('http://localhost:8080');
 
 export interface IMove {
     tile: ITile
     i: number
 }
 
+
+class CTile {
+    private color: string;
+    private id: number;
+    private symbol: string;
+
+    constructor(color: string, id: number, symbol: string) {
+        this.color = color;
+        this.id = id;
+        this.symbol = symbol;
+    }
+}
+
+
 interface BoardContainerProps {
     move: IMove[],
     setMove: React.Dispatch<React.SetStateAction<IMove[]>>;
     dragged: ITile|null,
     setDragged: Dispatch<ITile>,
-    setRackTiles: React.Dispatch<React.SetStateAction<ITile[]>>;
+    setRackTiles: React.Dispatch<React.SetStateAction<ITile[]>>,
+    boardSquares: any,
+    setBoardSquares: any
 }
 
 const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProps) => {
-    const [boardSquares, setBoardSquares] = useState<(ITile|undefined)[]>([]);
     const [zoomLevel, setZoomLevel] = useState<number>(1);
 
     useEffect(() => {
-        const squares: (ITile|undefined)[] = [];
-        for (let i : number = 0; i < 2601; i++) {
-            squares.push(
-                undefined
-            )
-        }
+        const handleBoardState = (boardState) => {
+            console.log("Board state received:", boardState);
 
-        setBoardSquares(squares);
-    }, []);
+           for (let i = 0; i < 50; i++) {
+               for (let j = 0; j < 50; j++) {
+                   if (boardState[i][j] !== undefined && boardState[i][j] !== null)  {
+                       const tileData = boardState[i][j];
+                       console.log(i, j)
+                       console.log(tileData)
+                       props.setBoardSquares((prevBoard: (ITile|undefined)[]) => {
+                        const newBoard: (ITile|undefined)[] = [...prevBoard];
+                        newBoard[j * 51 + i] = new CTile(tileData.color, tileData.id, tileData.symbol);
+                        return newBoard;
+               })}
+           }
+               }
+           }
+
+        socket.on('board_state', handleBoardState);
+
+        return () => {
+            socket.off('board_state', handleBoardState);
+        };
+    }, []); // Empty array means this effect runs once on mount
 
     const onDragStart = (e: any, tile: ITile) => {
-        e.dataTransfer.setData("draggedTile", JSON.stringify({
-            tile : tile,
-            i: e.target.getAttribute('i')
-        }));
-        props.setDragged(tile);
-        console.log(e.target);
+
+        const tileIndexInMove = props.move.findIndex(move => move.tile.id === tile.id);
+
+        if (tileIndexInMove !== -1) {
+            const newMove = [...props.move];
+            newMove.splice(tileIndexInMove, 1);
+            props.setMove(newMove);
+
+            e.dataTransfer.setData("draggedTile", JSON.stringify({
+                tile: tile,
+                i: e.target.getAttribute('i')
+            }));
+            props.setDragged(tile);
+        }
     }
 
     const onDrop = (e: any) => {
@@ -68,12 +108,12 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
         const tileData = JSON.parse(e.dataTransfer.getData("draggedTile"));
         const positionIndex: number = y * 51 + x;
 
-        if (boardSquares[positionIndex]) {
+        if (props.boardSquares[positionIndex]) {
             console.log("[debug] a tile is already there");
             return;
         }
 
-        setBoardSquares((prevBoard: (ITile|undefined)[]) => {
+        props.setBoardSquares((prevBoard: (ITile|undefined)[]) => {
             const newBoard: (ITile|undefined)[] = [...prevBoard];
             newBoard[positionIndex] = tileData.tile;
 
@@ -84,7 +124,7 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
         });
 
         const currentMove: IMove = {
-            tile: tileData,
+            tile: tileData.tile,
             i: positionIndex
         }
 
@@ -123,39 +163,26 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
     }
 
     const renderBoard = () => {
-        const squares = [];
-        for (let i: number = 0; i < 2601; i++) {
-            const tile: ITile|undefined = boardSquares[i];
+    return props.boardSquares.map((tile: CTile | undefined, index: React.Key | null | undefined) => {
+        const isTileInMove = props.move.some(moveItem => moveItem.i === index);
 
-            if (i == 0) {
-                console.log(tile);
-                console.log(props.move[0]);
-                }
-
-            const isTileInMove: boolean =
-                tile !== undefined && props.move.some(moveItem =>
-                moveItem.tile.symbol == tile.symbol &&
-                moveItem.tile.color == tile.color &&
-                moveItem.tile.id == tile.id
-    );
-
-            squares.push(
-                    <React.Fragment key={i}>
-                        <Tile
-                        i={i}
-                        extraStyles={i == 1300 ? 'bg-cyan-300' : ''}
-                        isOnRack={false}
-                        onDrop={onDrop}
-                        onDragOver={onDragOver}
-                        onDragStart={onDragStart}
-                        draggable={isTileInMove}
-                        {...(tile !== undefined && {tile: tile})}
-                    />
-                    </React.Fragment>
-            );
-        }
-        return squares;
-    };
+        return (
+                <Tile
+                    i={index}
+                    key={index}
+                    extraStyles={index === 1300 ? 'bg-cyan-300' : ''}
+                    isOnRack={false}
+                    onDrop={onDrop}
+                    onDragOver={onDragOver}
+                    onDragStart={onDragStart}
+                    draggable={isTileInMove}
+                    tile={tile}
+                >
+                    {tile?.id}
+                </Tile>
+        );
+    });
+};;
 
   return (
       <div className="flex p-6 items-center h-screen w-[80%]">

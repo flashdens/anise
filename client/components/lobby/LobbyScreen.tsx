@@ -11,7 +11,7 @@ interface LobbyScreenProps {
 
 const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
     const [players, setPlayers] = useState(props.lobby.players);
-    const playerName: string|null = typeof window !== 'undefined' ? localStorage.getItem('userName') : ''
+    const playerName: string|null = typeof window !== 'undefined' ? localStorage.getItem('playerName') : ''
     const router = useRouter();
 
     const handleKickPlayer = (playerId: number) => {
@@ -19,21 +19,25 @@ const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
     };
 
     const handleStartGame = () => {
-        console.log("starting game...");
+        console.log(props.lobby.id)
         socket.emit('start_game', props.lobby.id);
     };
 
     useEffect(() => {
-    socket.on('game_started', (data) => {
-        if (data.lobby.id === props.lobby.id) {
-            router.push(`/game/${data.lobby.id}`);
+    socket.on('game_started', (data: any) => {
+        console.log("maybe?")
+        console.log(data.lobby_id);
+        console.log(props.lobby.id);
+        if (data.lobby_id === props.lobby.id) {
+            router.push(`/game/${data.lobby_id}`);
         }
-    });
+    }), [props.lobby.id, router];
 
     return () => {
         socket.off('game_started');
     };
-}, [props.lobby.id]);
+
+}, [props.lobby.id, router]);
 
     return (
         <div className="max-w-md mx-auto my-8 p-6 bg-white rounded-md shadow-md">
@@ -43,14 +47,6 @@ const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
                 {players.map((player: any, index: number) => (
                     <li key={index} className={`mb-2 flex items-center justify-between ${player.name == playerName ? 'bg-green-400' : ''}`}>
                         <span>{player.name}</span>
-                        {props.isLobbyAdmin && (
-                            <button
-                                className="text-red-500 hover:text-red-700"
-                                onClick={() => handleKickPlayer(index)}
-                            >
-                                Kick
-                            </button>
-                        )}
                     </li>
                 ))}
             </ul>

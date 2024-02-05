@@ -4,14 +4,17 @@ import SubmitMoveButton from "@/components/game/rack/buttons/SubmitMoveButton";
 import {IMove} from "@/components/game/board/BoardContainer";
 import ResetMoveButton from "@/components/game/rack/buttons/ResetMoveButton";
 import RackVisibilityButton from "@/components/game/rack/buttons/RackVisibilityButton";
+import {ILobby} from "@/pages/game/[id]";
 interface RackProps {
-    initTiles: ITile[],
     move: IMove[]
     setMove: Dispatch<IMove[]>
     dragged: ITile|null,
     setDragged: Dispatch<ITile|null>,
     rackTiles: ITile[],
-    setRackTiles: React.Dispatch<React.SetStateAction<ITile[]>>;
+    setRackTiles: React.Dispatch<React.SetStateAction<ITile[]>>,
+    setBoardSquares: any
+    lobby: ILobby,
+    resetMove: any
 }
 
 export const Rack: React.FC<RackProps> = (props: RackProps) => {
@@ -59,7 +62,7 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
             <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 transition-all duration-500 "
             style={{pointerEvents: isRackVisible ? 'all' : 'none'}}>
                 <div className="rack inline-flex space-x-1.5 border p-6 shadow-md rounded-lg">
-                    <ResetMoveButton move={props.move} setMove={props.setMove}/>
+                    <ResetMoveButton resetMove={props.resetMove}/>
                     {props.rackTiles.map((tile, index) => (
                         <Tile
                             draggable={true}
@@ -72,7 +75,7 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
                             extraStyles={'h-8 w-8'}
                         />
                     ))}
-                    <SubmitMoveButton move={props.move}/>
+                    <SubmitMoveButton move={props.move} resetMove={props.resetMove}/>
                 </div>
             </div>
            }

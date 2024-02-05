@@ -7,6 +7,7 @@ const LobbyList = () => {
 
     const [lobbies, setLobbies] = useState([]);
        useEffect(() => {
+           localStorage.setItem("playerName", "")
            fetch("http://localhost:8080/api/lobby/get_lobbies")
                .then((response: Response) => {
                    if (!response.ok) {

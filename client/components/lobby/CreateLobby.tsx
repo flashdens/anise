@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 const CreateLobby = ({ }) => {
     const [lobbyName, setLobbyName] = useState('');
     const [playerName, setPlayerName] = useState('');
+    const [lobbyId, setLobbyId] = useState()
     const router = useRouter();
 
     const handleCreateLobby = async () => {
         if (!lobbyName) {
             throw new Error('A name is required!');
         }
+        // @ts-ignore
         fetch('http://localhost:8080/api/lobby/create', {
             method: 'POST',
             headers: {
@@ -17,15 +19,18 @@ const CreateLobby = ({ }) => {
             },
             body: JSON.stringify({"lobbyName": lobbyName, "playerName": playerName}),
         }).then((response) => {
+            console.log(response)
             if (!response.ok) {
                 throw new Error('Failed to create lobby');
             }
             return response.json();
         })
             .then((data) => {
-                localStorage.setItem("userName", playerName)
+                setLobbyId(data.lobby_id);
+                console.log(lobbyId);
+                localStorage.setItem("playerName", playerName)
+                router.push(`/lobby/join/${data.lobby_id}`)
             })
-        router.push("/lobby")
     };
 
     return (

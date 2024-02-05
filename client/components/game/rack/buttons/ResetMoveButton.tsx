@@ -1,20 +1,14 @@
-import React, {Dispatch} from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import {IMove} from "@/components/game/board/BoardContainer";
 
 interface ResetMoveButtonProps {
-    move: IMove[],
-    setMove: Dispatch<IMove[]>      
+    resetMove: any
 }
 
 const ResetMoveButton: React.FC<ResetMoveButtonProps> = (props: ResetMoveButtonProps) => {
-
-    const resetMove = (move: IMove[], setMove: Dispatch<IMove[]>) => {
-        console.log(move);
-    }
-
     return (
        <button className="px-4 py-1 text-xs transition-colors duration-300 rounded-full shadow-xl text-red-100 bg-red-500 hover:bg-red-600 shadow-red-200 dark:shadow-none"
-               onClick={() => resetMove(props.move, props.setMove)}>
+               onClick={() => props.resetMove()}>
            reset move
        </button>
     )

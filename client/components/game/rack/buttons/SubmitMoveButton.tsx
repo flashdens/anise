@@ -1,14 +1,18 @@
 import React from "react";
 import {IMove} from "@/components/game/board/BoardContainer";
+import {IPlayer} from "@/pages/game/[id]";
+import {Simulate} from "react-dom/test-utils";
+import io from "socket.io-client";
+const socket = io('http://localhost:8080'); // todo change me on wierzba
 
 interface SubmitMoveButtonProps {
-    move: IMove[]
+    move: IMove[],
+    resetMove: any
 }
 
 const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButtonProps) => {
 
    const submitMove = (move: IMove[]) => {
-        console.log(move);
 
         fetch("http://localhost:8080/api/game/send_move/lobby/1/player/1",
             {
@@ -16,15 +20,15 @@ const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButt
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({"move": move, playerName: "miloszek"})
+                body: JSON.stringify({"move": move, playerName: localStorage.getItem("playerName")})
             })
-            .then((response: Response) => {
+            .then(async (response: Response) => {
                 if (!response.ok) {
-                    throw new Error("error fetching response");
+                    const json = await response.json();
+                    throw new Error(json.message || "Unknown error occurred");
                 }
                 return response.json();
-            }).then((data: string) => {
-       }
+            }
        )};
 
    return (

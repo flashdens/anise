@@ -23,7 +23,7 @@ const Index = () => {
 
         useEffect(() => {
         if (typeof window !== 'undefined') {
-            setPlayerName(localStorage.getItem('userName'));
+            setPlayerName(localStorage.getItem('playerName'));
         }
     }, [])
         ;
@@ -38,8 +38,7 @@ const Index = () => {
                 return response.json();
             })
             .then((data) => {
-                // console.log(data);
-                // if (!data.players.includes(playerName)) {
+                // if (!data.players.some((player: { name: string | null; }) => player.name === playerName)) {
                 //     router.push('/lobby');
                 // }
                 setLobby(data);
@@ -47,14 +46,8 @@ const Index = () => {
             .catch((error) => {
                 console.error('Error joining lobby', error);
             });
-    }, [lobbyId]); // Dependency array: fetch the lobby data when lobbyId changes
+    }, [lobbyId, router]); // Dependency array: fetch the lobby data when lobbyId changes
 
-    useEffect(() => {
-        console.log("Lobby is now", lobby);
-        // if (lobby === undefined)
-        //     router.back()
-
-    }, [lobby]);
 
     return (
         <>
@@ -66,7 +59,7 @@ const Index = () => {
                 <div className="container flex flex-col justify-between items-center border text-center max-w-lg mx-auto">
                     {lobby ?
                         <LobbyScreen
-                            isLobbyAdmin={typeof window !== 'undefined' ? localStorage.getItem('userName') === lobby?.host : false}
+                            isLobbyAdmin={typeof window !== 'undefined' ? localStorage.getItem('playerName') === lobby.host : false}
                             lobby={lobby}
                         />
                         :
