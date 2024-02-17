@@ -9,7 +9,7 @@ interface BoardNavbarProps {
 
 const BoardNavbar: React.FC<BoardNavbarProps> = (props: BoardNavbarProps) => {
   return (
-      <div className="board-navbar flex absolute top-0 left-0 z-10 bg-white ">
+      <>
           <button onClick={props.onCenter}>
               <img src='/buttons/game/board_navbar/center.svg' height={20} width={20} alt=""/>
                 Center board
@@ -23,10 +23,10 @@ const BoardNavbar: React.FC<BoardNavbarProps> = (props: BoardNavbarProps) => {
                 Zoom out
           </button>
           <button onClick={props.onZoomReset}>
-              <img src='/buttons/game/board_navbar/zoom-out.svg' height={20} width={20} alt=""/>
+              <img src='/buttons/game/board_navbar/zoom-reset.svg' height={20} width={20} alt=""/>
                 Reset zoom
           </button>
-        </div>
+        </>
   );
 }
 

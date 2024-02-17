@@ -1,21 +1,19 @@
 import PlayerContainer from '@/components/game/scoreboard/PlayerContainer';
-import {ILobby, IPlayer} from "@/pages/game/[id]";
-import {ReactElement} from "react";
+import {ILobby, IPlayer} from "@/components/GameIndex";
+import React, {ReactElement, useContext, useEffect} from "react";
+import {LobbyContext} from "@/context/LobbyContext";
 
-interface ScoreboardProps{
-    lobby: ILobby,
-    currentTurnOf: number
-}
-const Scoreboard = (props: ScoreboardProps) => {
+const Scoreboard = () => {
+    const {lobby, setLobby} = useContext(LobbyContext);
+    console.log(lobby)
     const renderScoreboard = () => {
-        props.lobby
         const players: ReactElement[] = [];
-        for (let i: number = 0; i < props.lobby.players.length; ++i) {
+        for (let i: number = 0; i < lobby.players.length; ++i) {
             players.push(
                         <PlayerContainer
                             key={i}
-                            player={props.lobby.players[i]}
-                            currentlyPlaying={props.currentTurnOf == i + 1}
+                            player={lobby.players[i]}
+                            currentlyPlaying={lobby.currentTurnOf == i + 1}
                         />
             )
         }

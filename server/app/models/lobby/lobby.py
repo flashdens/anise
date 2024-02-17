@@ -17,8 +17,7 @@ class Lobby:
             "id": self.id,
             "name": self.name,
             "host": self.host,
-            "players": [player.to_dict() for player in self.players]
+            "players": [player.to_dict() for player in self.players],
+            "toMove": self.game.game_state.player_turn,
+            "gameStatus": self.game.game_state.game_status
         }
-
-    def start_game(self):
-        pass

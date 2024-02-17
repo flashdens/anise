@@ -8,12 +8,8 @@ const WelcomeScreen = () => {
     return (
         <div className="p-4">
             <div className="container flex flex-col justify-between items-center border text-center max-w-lg mx-auto">
-                <h1 className="py-4">anise</h1>
-                <h2 className="py-2">local</h2>
-                <NewLocalGameButton/>
-                <div className={"py-2"}></div>
-                <div className={"border-t border-gray-300 w-[60%]"}></div>
-                <h2 className="py-2">online</h2>
+                <h1 className="py-2 text-xl">anise</h1>
+                <p className={"pb-2 text-sm"}>Play Qwirkle online with your friends!</p>
                 <JoinLobbyButton/>
                 <NewLobbyButton/>
                 <JoinByCode/>

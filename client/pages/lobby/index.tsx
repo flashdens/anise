@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import LobbyList from "@/components/lobby_list/LobbyList";
+import LobbyList from "@/components/lobby_list/LobbyList"
 
 const index = () => {
     return (

@@ -26,8 +26,8 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
     }
 
     const onDragStart = (e: any, tile: ITile) => {
-        if (!props.playerTurn)
-            return;
+        // if (!props.playerTurn)
+        //     return;
 
         props.setDragged(tile);
         e.dataTransfer.setData("draggedTile", JSON.stringify({tile: tile}));
@@ -79,7 +79,7 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
                             extraStyles={'h-8 w-8'}
                         />
                     ))}
-                    <SubmitMoveButton move={props.move} resetMove={props.resetMove} playerMove={props.playerTurn}/>
+                    <SubmitMoveButton move={props.move} resetMove={props.resetMove} playerMove={true}/>
                 </div>
             </div>
            }

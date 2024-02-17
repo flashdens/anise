@@ -11,4 +11,4 @@ import api.lobby.create_lobby
 import api.lobby.join_lobby
 
 import server.app.socketio.start_game
-import server.app.socketio.game_state
+import server.app.socketio.update_board_state

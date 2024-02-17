@@ -1,5 +1,6 @@
 from flask import request, jsonify, session
-from __main__ import app
+from __main__ import app, socketio
+from flask_socketio import emit
 
 from server.app.models.game.player import Player
 from server.app.models.lobby.lobby import lobbies
@@ -29,7 +30,6 @@ def join_lobby(lobby_id):
         return jsonify({'error': f'Lobby {lobby_id} is full!'}), 403
 
     lobby_to_join.players.append(Player(player_name))
-    session['player_name'] = player_name
-    print("Session name set! ", session['player_name'])
+    socketio.emit('player_joined')
 
     return jsonify({'message': f'Successfully joined lobby {lobby_id}'}), 200

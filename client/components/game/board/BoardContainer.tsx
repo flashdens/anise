@@ -3,7 +3,7 @@
  * - implement reset move
  */
 
-import React, {Dispatch, useEffect, useState} from "react";
+import React, {Dispatch, useEffect, useRef, useState} from "react";
 
 import Tile, {ITile} from "@/components/game/Tile";
 import BoardNavbar from "@/components/game/board/BoardNavbar";
@@ -70,7 +70,6 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
     }, []); // Empty array means this effect runs once on mount
 
     const onDragStart = (e: any, tile: ITile) => {
-
         const tileIndexInMove = props.move.findIndex(move => move.tile.id === tile.id);
 
         if (tileIndexInMove !== -1) {
@@ -104,6 +103,7 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
             console.log("[debug] tile has no coordinates")
             return;
         }
+
 
         const tileData = JSON.parse(e.dataTransfer.getData("draggedTile"));
         const positionIndex: number = y * 51 + x;
@@ -146,16 +146,27 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
         e.preventDefault();
     }
 
+
+    const containerRef = useRef(null);
+
     const centerBoard = (): void => {
-        console.log("TODO")
-    };
+        console.log("help")
+        console.log(containerRef)
+        if (containerRef.current) {
+            const container: HTMLDivElement = containerRef.current;
+            const scrollTop = container.scrollHeight / 2 - container.clientHeight / 2;
+            container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+        }
+    }
 
     const zoomIn = (): void => {
-        console.log(Math.round(zoomLevel * 100));
+        setZoomLevel(zoomLevel + 0.15)
     };
 
     const zoomOut = (): void => {
-        console.log(Math.round(zoomLevel * 100));
+        if (zoomLevel > 0.7)
+            setZoomLevel(zoomLevel - 0.15)
+
     };
 
     const resetZoom = (): void => {
@@ -185,8 +196,8 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
 };;
 
   return (
-      <div className="flex p-6 items-center h-screen w-[80%]">
-          <div className={"board-navbar hidden"}>
+      <div className="flex items-center h-screen w-[80%]">
+          <div className={"board-navbar flex gap-2"}>
             <BoardNavbar
                 onCenter={centerBoard}
                 onZoomIn={zoomIn}
@@ -194,8 +205,11 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
                 onZoomReset={resetZoom}
             />
           </div>
-        <div className="board-container h-[75%] overflow-scroll">
-            <div style={{transform: `scale(${zoomLevel})`}} className={`grid grid-cols-51 grid-rows-51 transition-transform duration-300`}>
+        <div className="board-container flex-grow h-[75%] overflow-scroll"
+                ref={containerRef}
+        >
+            <div
+                style={{transform: `scale(${zoomLevel})`}} className={`grid grid-cols-51 grid-rows-51 transition-transform duration-300`}>
                 {renderBoard()}
             </div>
         </div>

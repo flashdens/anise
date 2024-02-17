@@ -31,30 +31,37 @@ const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
         if (data.lobby_id === props.lobby.id) {
             router.push(`/game/${data.lobby_id}`);
         }
+
+        socket.on('player_joined', () => {
+            location.reload();
+        });
+
     }), [props.lobby.id, router];
 
     return () => {
         socket.off('game_started');
+        socket.off('player_joined')
     };
 
 }, [props.lobby.id, router]);
 
     return (
-        <div className="max-w-md mx-auto my-8 p-6 bg-white rounded-md shadow-md">
+        <div className="max-w-md mx-auto my-8 p-6 rounded-md shadow-md border">
             <h2 className="text-2xl font-bold mb-4 text-center">{props.lobby.name}</h2>
             <h3 className="text-lg font-bold mb-2">Players:</h3>
             <ul>
                 {players.map((player: any, index: number) => (
-                    <li key={index} className={`mb-2 flex items-center justify-between ${player.name == playerName ? 'bg-green-400' : ''}`}>
-                        <span>{player.name}</span>
+                    <li key={index} className={`mb-2 flex items-center text-center  ${player.name == playerName ? 'bg-green-300' : ''}`}>
+                        <span className={"text-center dark:text-black"}>{player.name}</span>
                     </li>
                 ))}
             </ul>
 
             {props.isLobbyAdmin && (
                 <button
-                    className="w-full p-2 mt-4 bg-green-500 text-white rounded-md hover:bg-green-600"
+                    className={`w-full p-2 mt-4 bg-green-500 text-white rounded-md hover:bg-green-600 disabled:bg-green-200`}
                     onClick={handleStartGame}
+                    disabled={props.lobby.players.length < 2}
                 >
                     Start Game
                 </button>

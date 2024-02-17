@@ -1,49 +1,9 @@
-import React, {useState, useEffect} from "react";
+import WelcomeScreen from "@/components/welcome_screen/WelcomeScreen";
 
-import BoardContainer, {IMove} from "@/components/game/board/BoardContainer";
-import Rack from "@/components/game/rack/Rack";
-import Navbar from '@/components/navbar/Navbar'
-import Scoreboard from '@/components/game/scoreboard/Scoreboard'
-
-import {ITile} from "@/components/game/Tile";
-
-const Index = () => {
-    const [playerTiles, setPlayerTiles] = useState<ITile[]>([]);
-    useEffect(() => {
-        fetch("http://localhost:8080/api/draw")
-            .then((response: Response) => {
-                if (!response.ok) {
-                    throw new Error("error fetching response");
-                }
-                return response.json();
-            })
-            .then((data: ITile[]) => {
-                setPlayerTiles(data);
-            })
-            .catch((error: Error) => {
-                console.error('Error - ', error)
-            });
-    }, []);
-
-
-    const [move, setMove] = useState<IMove[]>([]);
-    const [dragged, setDragged] = useState<ITile|null>(null);
-    const [rackTiles, setRackTiles] = useState<ITile[]>(playerTiles);
-
-
-    useEffect(() => { // todo
-        setRackTiles(playerTiles)
-    }, [playerTiles]);
+const index = () => {
     return (
-        <div className={"root"}>
+        <WelcomeScreen/>
+    )
+}
 
-            <div className={"flex flex-row"}>
-            <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles}/>
-            <Scoreboard/>
-            </div>
-            <Rack initTiles={playerTiles} move={move} setMove={setMove} dragged={dragged} setDragged={setDragged} rackTiles={rackTiles} setRackTiles={setRackTiles}/>
-        </div>
-    );
-};
-
-export default Index;
+export default index;

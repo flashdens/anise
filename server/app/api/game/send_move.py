@@ -1,7 +1,8 @@
 from flask import jsonify, request, session
 from __main__ import app
 from server.app.models.lobby.lobby import lobbies
-from server.app.socketio.game_state import update_client_game_state
+from server.app.socketio.update_board_state import update_board_state
+
 
 @app.route('/api/game/send_move/lobby/<int:lobby_id>/player/<int:player_num>', methods=['POST'])
 def send_move(lobby_id, player_num):
@@ -28,9 +29,8 @@ def send_move(lobby_id, player_num):
         return jsonify(message), 422
 
     game.players[game_player_number].score += move_score
-    game.game_state.player_turn = (game.game_state.player_turn % len(game.players)) + 1
 
-    update_client_game_state(game.board.board)
+    update_board_state(game)
 
     return jsonify({
         "message": message,

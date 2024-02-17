@@ -15,7 +15,7 @@ class Status(Enum):
 class GameState:
     def __init__(self):
         self.player_turn = 0
-        self.game_status = Status.WAITING_FOR_START
+        self.game_status = 1
 
 
 class Game:
@@ -39,6 +39,7 @@ class Game:
         for i, player in enumerate(self.players):
             if player.name == request_player_name:
                 return i
+
         return -1
 
     def start_game(self):

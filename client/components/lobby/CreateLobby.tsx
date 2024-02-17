@@ -27,7 +27,6 @@ const CreateLobby = ({ }) => {
         })
             .then((data) => {
                 setLobbyId(data.lobby_id);
-                console.log(lobbyId);
                 localStorage.setItem("playerName", playerName)
                 router.push(`/lobby/join/${data.lobby_id}`)
             })
