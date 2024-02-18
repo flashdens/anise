@@ -25,6 +25,11 @@ class GameBoard:
         last_tile_row = last_tile[0][0]
         last_tile_col = last_tile[0][1]
 
+        row_len = abs(last_tile_row - first_tile_row)
+        col_len = abs(last_tile_col - last_tile_row)
+
+        move_len = row_len if row_len > col_len else col_len
+
         # check if the move is a line
         if abs(last_tile_row - first_tile_row) not in (0, len(move) - 1) \
                 and abs(last_tile_col - first_tile_col) not in (0, len(move) - 1):
@@ -88,7 +93,7 @@ class GameBoard:
             # todo this won't work for moves which are only dokładki
             score += 12 if local_count == 6 else 0
 
-        score += 12 if len(move) == 6 else abs()
+        score += 12 if len(move) == 6 else move_len
 
         return {'message': 'It works!'}, score
 
