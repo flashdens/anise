@@ -12,7 +12,7 @@ const WelcomeScreen = () => {
                 <p className={"pb-2 text-sm"}>Play Qwirkle online with your friends!</p>
                 <JoinLobbyButton/>
                 <NewLobbyButton/>
-                <JoinByCode/>
+                {/*<JoinByCode/>*/}
                 <div className={"py-2"}></div>
                 <div className={"border-t border-gray-300  w-[60%] py-3"}></div>
                 <HowToPlayButton/>

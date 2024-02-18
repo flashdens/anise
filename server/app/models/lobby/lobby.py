@@ -19,5 +19,6 @@ class Lobby:
             "host": self.host,
             "players": [player.to_dict() for player in self.players],
             "toMove": self.game.game_state.player_turn,
-            "gameStatus": self.game.game_state.game_status
+            "gameStatus": self.game.game_state.game_status,
+            "board": [[tile.to_dict() if tile else None for tile in row] for row in self.game.board.board]
         }

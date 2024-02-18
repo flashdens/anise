@@ -12,6 +12,7 @@ class Player:
         self.rack = []
 
     def draw_tile(self, bag):
+        print(len(bag.content))
         self.rack.append(bag.content.pop())
 
 

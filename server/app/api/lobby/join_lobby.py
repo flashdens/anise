@@ -14,7 +14,6 @@ def lobby_exists(searched_lobby_id):
 def join_lobby(lobby_id):
     data = request.get_json()
     player_name = data['playerName']
-    print(lobbies)
     if not player_name:
         return jsonify({'error': 'Player name is required'}), 400
 

@@ -16,5 +16,4 @@ def create_lobby():
     new_lobby.players.append(Player(host))
     lobbies.append(new_lobby)
 
-    print(lobbies)
     return jsonify({"lobby_id": new_lobby.id}), 200

@@ -3,12 +3,13 @@
  * - implement reset move
  */
 
-import React, {Dispatch, useEffect, useRef, useState} from "react";
+import React, {Dispatch, useContext, useEffect, useRef, useState} from "react";
 
 import Tile, {ITile} from "@/components/game/Tile";
 import BoardNavbar from "@/components/game/board/BoardNavbar";
 import assert from "assert";
 import io from "socket.io-client";
+import {LobbyContext} from "@/context/LobbyContext";
 const socket = io('http://localhost:8080');
 
 export interface IMove {
@@ -17,17 +18,7 @@ export interface IMove {
 }
 
 
-class CTile {
-    private color: string;
-    private id: number;
-    private symbol: string;
 
-    constructor(color: string, id: number, symbol: string) {
-        this.color = color;
-        this.id = id;
-        this.symbol = symbol;
-    }
-}
 
 
 interface BoardContainerProps {
@@ -42,32 +33,37 @@ interface BoardContainerProps {
 
 const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProps) => {
     const [zoomLevel, setZoomLevel] = useState<number>(1);
+    const {lobby} = useContext(LobbyContext);
+
+const handleBoardState = (boardState: ITile[][]) => {
+            props.setBoardSquares((prevBoard: string | any[]) => {
+                const newBoard = prevBoard.slice();
+                for (let i = 0; i < 50; i++) {
+                    for (let j = 0; j < 50; j++) {
+                        if (boardState[i][j]) {
+                            // @ts-ignore
+                            newBoard[j * 51 + i] = {color: boardState[i][j].color, symbol: boardState[i][j].symbol, id: boardState[i][j].id}
+                        }
+                    }
+                }
+                return newBoard;
+            });
+        };
+
 
     useEffect(() => {
-        const handleBoardState = (boardState) => {
-            console.log("Board state received:", boardState);
-
-           for (let i = 0; i < 50; i++) {
-               for (let j = 0; j < 50; j++) {
-                   if (boardState[i][j] !== undefined && boardState[i][j] !== null)  {
-                       const tileData = boardState[i][j];
-                       console.log(i, j)
-                       console.log(tileData)
-                       props.setBoardSquares((prevBoard: (ITile|undefined)[]) => {
-                        const newBoard: (ITile|undefined)[] = [...prevBoard];
-                        newBoard[j * 51 + i] = new CTile(tileData.color, tileData.id, tileData.symbol);
-                        return newBoard;
-               })}
-           }
-               }
-           }
-
         socket.on('board_state', handleBoardState);
 
         return () => {
             socket.off('board_state', handleBoardState);
         };
-    }, []); // Empty array means this effect runs once on mount
+    }, [handleBoardState, props.setBoardSquares, props.boardSquares]);
+
+
+    useEffect(() => {
+      handleBoardState(lobby.board)
+        centerBoard();
+    }, [lobby.board]);
 
     const onDragStart = (e: any, tile: ITile) => {
         const tileIndexInMove = props.move.findIndex(move => move.tile.id === tile.id);
@@ -150,12 +146,12 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
     const containerRef = useRef(null);
 
     const centerBoard = (): void => {
-        console.log("help")
         console.log(containerRef)
         if (containerRef.current) {
             const container: HTMLDivElement = containerRef.current;
             const scrollTop = container.scrollHeight / 2 - container.clientHeight / 2;
-            container.scrollTo({ top: scrollTop, behavior: 'smooth' });
+            const scrollLeft = container.scrollWidth / 2 - container.clientWidth / 2;
+            container.scrollTo({ top: scrollTop, left: scrollLeft, behavior: 'smooth' });
         }
     }
 
@@ -174,7 +170,7 @@ const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProp
     }
 
     const renderBoard = () => {
-    return props.boardSquares.map((tile: CTile | undefined, index: React.Key | null | undefined) => {
+    return props.boardSquares.map((tile: ITile | undefined, index: React.Key | null | undefined) => {
         const isTileInMove = props.move.some(moveItem => moveItem.i === index);
 
         return (

@@ -43,7 +43,7 @@ class Game:
         return -1
 
     def start_game(self):
-        self.game_state.player_turn = 1
+        self.game_state.player_turn = 0
         for player in self.players:
             for _ in range(6):
                 player.draw_tile(self.bag)
@@ -61,6 +61,14 @@ class Game:
             return message, False
         else:
             self.board.make_move(move.move)
+
+            for tile in move.move.values():
+                matching_tile = [t for t in self.players[self.game_state.player_turn].rack if t.id == tile.id]
+                if matching_tile:
+                    self.players[self.game_state.player_turn].rack.remove(matching_tile[0])
+                else:
+                    return {"message": "something has gone terribly wrong..."}, 0
+
             return message, move_score
 
 

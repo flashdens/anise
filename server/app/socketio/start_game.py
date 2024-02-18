@@ -5,7 +5,6 @@ from flask_socketio import emit
 
 @socketio.on('start_game')
 def start_game(lobby_id):
-    print(lobbies)
     lobby_to_start = next((lobby for lobby in lobbies if lobby.id == lobby_id), None)
     if lobby_to_start is None:
         pass

@@ -51,8 +51,8 @@ class GameBoard:
                     return 0
 
                 # duplicate - also not allowed
-                if self.board[checked_x][checked_y].color != tile.color \
-                        and self.board[checked_x][checked_y].symbol != tile.symbol:
+                if self.board[checked_x][checked_y].color == tile.color \
+                        and self.board[checked_x][checked_y].symbol == tile.symbol:
                     return 0
 
                 '''
@@ -63,8 +63,8 @@ class GameBoard:
                         or self.board[checked_x][checked_y].symbol == tile.symbol:
                     local_count += 1
                     # first, determine if the line is vertical or horizontal
+                    checked_x, checked_y = checked_x + dir[0], checked_y + dir[1]
                     while self.board[checked_x][checked_y] is not None:
-                        checked_x, checked_y = checked_x + dir[0], checked_y + dir[1]
 
                         if checked_x < 0 or checked_x > BOARD_SIZE or checked_y < 0 or checked_y > BOARD_SIZE:
                             continue
@@ -78,15 +78,17 @@ class GameBoard:
                                 and self.board[checked_x][checked_y].symbol != tile.symbol:
                             return 0
 
+                        checked_x, checked_y = checked_x + dir[0], checked_y + dir[1]
+
                     local_count += 1
 
                     if local_count == 7:
-                        return {'message': "You broke somebody's Qwirkle!"}, 0
+                        return {'message': "Lines can include only up to 6 tiles!"}, 0
 
             # todo this won't work for moves which are only dokładki
-            score += 12 if local_count == 6 else local_count
+            score += 12 if local_count == 6 else 0
 
-        score += 12 if len(move) == 6 else len(move)
+        score += 12 if len(move) == 6 else abs()
 
         return {'message': 'It works!'}, score
 

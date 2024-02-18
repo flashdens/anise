@@ -15,7 +15,6 @@ class Move:
             self.move[(x, y)] = Tile(tile['tile']['color'], tile['tile']['symbol'], tile['tile']['id'])
 
     def is_combination_valid(self, move):
-        print(move)
         colors = {tile.color for tile in move.values()}
         symbols = {tile.symbol for tile in move.values()}
 

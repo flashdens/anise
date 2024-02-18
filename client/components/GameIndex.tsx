@@ -9,10 +9,12 @@ import io from "socket.io-client";
 const socket = io('http://localhost:8080'); // todo change me on wierzba
 
 export interface ILobby {
+    board: ITile[][];
     host: string;
     id: number;
     name: string;
     players: IPlayer[];
+    toMove: number;
 }
 
 export interface IPlayer {
@@ -30,7 +32,6 @@ const GameIndex = () => {
     const playerName = typeof window !== 'undefined' ? localStorage.getItem('playerName') : null;
     const [move, setMove] = useState<IMove[]>([]);
     const [dragged, setDragged] = useState<ITile | null>(null);
-    const [playerTurn, setPlayerTurn] = useState(false)
     let playerId: number;
 
     const resetMove = (move: IMove[], setMove: Dispatch<SetStateAction<IMove[]>>, setRackTiles: Dispatch<SetStateAction<ITile[]>>, setBoardSquares: Dispatch<SetStateAction<(ITile | undefined)[]>>) => {
@@ -62,49 +63,57 @@ const GameIndex = () => {
     }, [])
 
 
+    const fetchLobbyAndTiles = () => {
+    if (!lobbyId) return;
+
+    fetch(`http://localhost:8080/api/lobby/${lobbyId}`)
+        .then(lobbyResponse => {
+            if (!lobbyResponse.ok) {
+               router.push('/lobby')
+            }
+            return lobbyResponse.json();
+        })
+        .then(lobbyData => {
+            setLobby(lobbyData);
+            const playerId = lobbyData.players.findIndex((p) => p.name === playerName);
+            console.log(playerId    )
+            if (playerId === -1) {
+                throw new Error("Player not found in lobby");
+            }
+            return fetch(`http://localhost:8080/api/game/${lobbyId}/get_tiles/${playerId}`);
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(tilesData => {
+            setRackTiles(tilesData);
+        })
+        .catch(error => {
+            console.error('Error - ', error);
+        });
+};
+
     useEffect(() => {
-        if (!lobbyId) return;
-
-        fetch(`http://localhost:8080/api/lobby/${lobbyId}`)
-            .then(lobbyResponse => {
-                if (!lobbyResponse.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return lobbyResponse.json();
-            })
-            .then(lobbyData => {
-                setLobby(lobbyData);
-                playerId = lobbyData.players.findIndex((p) => p.name === playerName);
-                console.log(playerName)
-                if (playerId === -1) {
-                    throw new Error("Player not found in lobby");
-                }
-
-                return fetch(`http://localhost:8080/api/game/${lobbyId}/get_tiles/${playerId + 1}`);
-            })
-            .then(tilesResponse => {
-                if (!tilesResponse.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return tilesResponse.json();
-            })
-            .then(tilesData => {
-                setRackTiles(tilesData);
-            })
-            .catch(error => {
-                console.error('Error - ', error);
-            });
-    }, [lobbyId, playerName, setLobby, setRackTiles]);
+    fetchLobbyAndTiles();
+    socket.on('board_state', fetchLobbyAndTiles)
+}, [lobbyId, playerName, setLobby, setBoardSquares]);
 
     return (
-            <div className={"root"}>
-                <div className={"flex flex-row"}>
-                    <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles} boardSquares={boardSquares} setBoardSquares={setBoardSquares}/>
-                    {lobby? <Scoreboard/> : <div>Loading...</div>}
-                </div>
-                <Rack move={move} setMove={setMove} dragged={dragged} setDragged={setDragged} rackTiles={rackTiles} setRackTiles={setRackTiles} setBoardSquares={setBoardSquares} resetMove={resetMove} playerTurn={playerTurn} lobby={lobby}/>
+    <div className={"root"}>
+        {lobby ? (
+            <div className={"flex flex-row"}>
+                <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles} boardSquares={boardSquares} setBoardSquares={setBoardSquares}/>
+                <Scoreboard />
+                <Rack move={move} setMove={setMove} dragged={dragged} setDragged={setDragged} rackTiles={rackTiles} setRackTiles={setRackTiles} setBoardSquares={setBoardSquares} resetMove={() => resetMove(move, setMove, setRackTiles, setBoardSquares)}/>
             </div>
-    );
+        ) : (
+            <div>Loading...</div>
+        )}
+    </div>
+);
 };
 
 export default GameIndex;

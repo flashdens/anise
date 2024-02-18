@@ -5,7 +5,6 @@ import {LobbyContext} from "@/context/LobbyContext";
 
 const Scoreboard = () => {
     const {lobby, setLobby} = useContext(LobbyContext);
-    console.log(lobby)
     const renderScoreboard = () => {
         const players: ReactElement[] = [];
         for (let i: number = 0; i < lobby.players.length; ++i) {
@@ -13,7 +12,7 @@ const Scoreboard = () => {
                         <PlayerContainer
                             key={i}
                             player={lobby.players[i]}
-                            currentlyPlaying={lobby.currentTurnOf == i + 1}
+                            currentlyPlaying={lobby.toMove == i + 1}
                         />
             )
         }
@@ -21,7 +20,7 @@ const Scoreboard = () => {
 }
 
     return (
-        <div className={"scoreboard flex-col"}>
+        <div >
         {renderScoreboard()}
         </div>
     );

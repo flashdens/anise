@@ -10,11 +10,11 @@ def get_tiles(lobby_id, player_id):
     if game.game_state.game_status != 2:
         return jsonify({'message': 'game is not running!'}), 400
 
-    player = game.players[player_id - 1]
+    player = game.players[player_id]
     tiles_to_draw = 6 - len(player.rack)
 
     for i in range(tiles_to_draw):
         player.draw_tile(game.bag)
 
-    print(player.rack)
+
     return jsonify(player.rack_to_dict())

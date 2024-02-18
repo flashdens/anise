@@ -19,7 +19,7 @@ def send_move(lobby_id, player_num):
 
     game_player_number = game.find_player_index(request_player_name)
 
-    if game_player_number + 1 != player_num:
+    if game_player_number != player_num:
         return jsonify({"message": "you're not the player to move! please stop messing with my api"}), 403
 
     received_move = data['move']
@@ -28,6 +28,8 @@ def send_move(lobby_id, player_num):
     if move_score == 0:
         return jsonify(message), 422
 
+
+    game.players[game_player_number].rack.pop()
     game.players[game_player_number].score += move_score
 
     update_board_state(game)

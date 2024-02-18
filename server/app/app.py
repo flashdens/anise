@@ -15,4 +15,4 @@ app.secret_key = 'ilovemaciejgodny'
 
 if __name__ == '__main__':
     app.run(host="localhost", debug=True, port=8080)
-    socketio.run(app, port=8080, debug=True)
+    socketio.run(app, port=8080, debug=True, allow_unsafe_werkzeug=True)

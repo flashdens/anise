@@ -2,7 +2,7 @@
 
 import api.game.get_tiles
 import api.game.send_move
-import api.game.trade_tiles
+import api.game.exchange_tiles
 
 import api.lobby.get_lobbies
 import api.lobby.get_lobby
