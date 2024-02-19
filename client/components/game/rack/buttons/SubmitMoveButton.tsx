@@ -9,6 +9,7 @@ interface SubmitMoveButtonProps {
     move: IMove[],
     resetMove: any,
     playerMove: boolean,
+    setMove: any
 }
 
 const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButtonProps) => {
@@ -29,6 +30,10 @@ const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButt
                 if (!response.ok) {
                     props.resetMove();
                 }
+                else {
+                    props.setMove([]);
+                }
+
             }
        )};
 

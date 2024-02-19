@@ -9,7 +9,7 @@ interface BoardNavbarProps {
 
 const BoardNavbar: React.FC<BoardNavbarProps> = (props: BoardNavbarProps) => {
   return (
-      <>
+      <div className={"bg-gray-500"}>
           <button onClick={props.onCenter}>
               <img src='/buttons/game/board_navbar/center.svg' height={20} width={20} alt=""/>
                 Center board
@@ -26,7 +26,7 @@ const BoardNavbar: React.FC<BoardNavbarProps> = (props: BoardNavbarProps) => {
               <img src='/buttons/game/board_navbar/zoom-reset.svg' height={20} width={20} alt=""/>
                 Reset zoom
           </button>
-        </>
+        </div>
   );
 }
 

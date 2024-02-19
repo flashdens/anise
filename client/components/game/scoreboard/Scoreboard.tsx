@@ -4,7 +4,7 @@ import React, {ReactElement, useContext, useEffect} from "react";
 import {LobbyContext} from "@/context/LobbyContext";
 
 const Scoreboard = () => {
-    const {lobby, setLobby} = useContext(LobbyContext);
+    const {lobby} = useContext(LobbyContext);
     const renderScoreboard = () => {
         const players: ReactElement[] = [];
         for (let i: number = 0; i < lobby.players.length; ++i) {
@@ -20,10 +20,10 @@ const Scoreboard = () => {
 }
 
     return (
-        <div >
+    <div className="scoreboard w-[20%] h-screen overflow-auto">
         {renderScoreboard()}
-        </div>
-    );
+    </div>
+);
 }
 
 export default Scoreboard;

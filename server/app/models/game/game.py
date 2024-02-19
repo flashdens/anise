@@ -53,15 +53,19 @@ class Game:
         Move.construct_move(move, received_move)
 
         if not Move.is_combination_valid(move, move.move):
-            return {"message": "invalid move!"}, 0
+            return {"message": "invalid move! invalid combination"}, 0
+        else:
+            message, success = Move.is_move_valid_on_board(move, self.board)
+            if success:
+                self.board.make_move(move.move)
+            else:
+                return message, 0
 
         message, move_score = self.board.calculate_points(move.move)
 
         if move_score == 0:
             return message, False
         else:
-            self.board.make_move(move.move)
-
             for tile in move.move.values():
                 matching_tile = [t for t in self.players[self.game_state.player_turn].rack if t.id == tile.id]
                 if matching_tile:
@@ -70,7 +74,6 @@ class Game:
                     return {"message": "something has gone terribly wrong..."}, 0
 
             return message, move_score
-
 
     def game_loop(self):  # todo wtf is that name
         while not self.game_over():

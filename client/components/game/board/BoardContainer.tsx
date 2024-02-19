@@ -28,11 +28,12 @@ interface BoardContainerProps {
     setDragged: Dispatch<ITile>,
     setRackTiles: React.Dispatch<React.SetStateAction<ITile[]>>,
     boardSquares: any,
-    setBoardSquares: any
+    setBoardSquares: any,
+    zoomLevel: number,
+    containerRef: any
 }
 
 const BoardContainer: React.FC<BoardContainerProps> = (props: BoardContainerProps) => {
-    const [zoomLevel, setZoomLevel] = useState<number>(1);
     const {lobby} = useContext(LobbyContext);
 
 const handleBoardState = (boardState: ITile[][]) => {
@@ -42,7 +43,7 @@ const handleBoardState = (boardState: ITile[][]) => {
                     for (let j = 0; j < 50; j++) {
                         if (boardState[i][j]) {
                             // @ts-ignore
-                            newBoard[j * 51 + i] = {color: boardState[i][j].color, symbol: boardState[i][j].symbol, id: boardState[i][j].id}
+                            newBoard[i * 51 + j] = {color: boardState[i][j].color, symbol: boardState[i][j].symbol, id: boardState[i][j].id}
                         }
                     }
                 }
@@ -62,7 +63,6 @@ const handleBoardState = (boardState: ITile[][]) => {
 
     useEffect(() => {
       handleBoardState(lobby.board)
-        centerBoard();
     }, [lobby.board]);
 
     const onDragStart = (e: any, tile: ITile) => {
@@ -143,31 +143,8 @@ const handleBoardState = (boardState: ITile[][]) => {
     }
 
 
-    const containerRef = useRef(null);
 
-    const centerBoard = (): void => {
-        console.log(containerRef)
-        if (containerRef.current) {
-            const container: HTMLDivElement = containerRef.current;
-            const scrollTop = container.scrollHeight / 2 - container.clientHeight / 2;
-            const scrollLeft = container.scrollWidth / 2 - container.clientWidth / 2;
-            container.scrollTo({ top: scrollTop, left: scrollLeft, behavior: 'smooth' });
-        }
-    }
 
-    const zoomIn = (): void => {
-        setZoomLevel(zoomLevel + 0.15)
-    };
-
-    const zoomOut = (): void => {
-        if (zoomLevel > 0.7)
-            setZoomLevel(zoomLevel - 0.15)
-
-    };
-
-    const resetZoom = (): void => {
-        setZoomLevel(1);
-    }
 
     const renderBoard = () => {
     return props.boardSquares.map((tile: ITile | undefined, index: React.Key | null | undefined) => {
@@ -177,7 +154,7 @@ const handleBoardState = (boardState: ITile[][]) => {
                 <Tile
                     i={index}
                     key={index}
-                    extraStyles={index === 1300 ? 'bg-cyan-300' : ''}
+                    extraStyles={index === 1300 ? 'font-extrabold bg-cyan-100' : ''}
                     isOnRack={false}
                     onDrop={onDrop}
                     onDragOver={onDragOver}
@@ -192,20 +169,12 @@ const handleBoardState = (boardState: ITile[][]) => {
 };;
 
   return (
-      <div className="flex items-center h-screen w-[80%]">
-          <div className={"board-navbar flex gap-2"}>
-            <BoardNavbar
-                onCenter={centerBoard}
-                onZoomIn={zoomIn}
-                onZoomOut={zoomOut}
-                onZoomReset={resetZoom}
-            />
-          </div>
+      <div className="flex items-center h-screen w-[70%]">
         <div className="board-container flex-grow h-[75%] overflow-scroll"
-                ref={containerRef}
+                ref={props.containerRef}
         >
             <div
-                style={{transform: `scale(${zoomLevel})`}} className={`grid grid-cols-51 grid-rows-51 transition-transform duration-300`}>
+                style={{transform: `scale(${props.zoomLevel})`}} className={`grid grid-cols-51 grid-rows-51 transition-transform duration-300`}>
                 {renderBoard()}
             </div>
         </div>

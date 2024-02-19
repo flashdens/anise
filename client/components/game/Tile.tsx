@@ -41,7 +41,7 @@ const Tile: React.FC<TileProps> = (props: TileProps) => {
 
     return (
         <div
-            draggable={props.draggable || props.isOnRack}
+            draggable={props. draggable && props.isOnRack}
             onClick={() => props.isExchangingTiles ? toggleTileForExchange(props.tile) : ""}
             onDragStart={(e: any) => props.onDragStart(e, props.tile)}
             onDragOver={(e: any) => props.onDragOver(e)}
@@ -50,7 +50,7 @@ const Tile: React.FC<TileProps> = (props: TileProps) => {
             className={
             `flex border border-gray-200 aspect-square h-8 w-8 justify-center align-center text-center 
             text-${props.tile?.color != undefined ? props.tile.color : 'white'}-500 
-            ${props.exchangedTilesList && props.exchangedTilesList.some(tile => tile.id === props.tile.id) ? 'border-2 border-blue-500' : ''} 
+            ${props.exchangedTilesList && props.exchangedTilesList.some(tile => tile.id === props.tile.id) ? 'border-2 border-red-500' : ''} 
             ${props.extraStyles} 
             select-none`}
         >

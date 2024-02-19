@@ -1,4 +1,4 @@
-import React, {useState, useEffect, Dispatch, SetStateAction, useContext} from "react";
+import React, {useState, useEffect, Dispatch, SetStateAction, useContext, useRef} from "react";
 import BoardContainer, { IMove } from "@/components/game/board/BoardContainer";
 import Rack from "@/components/game/rack/Rack";
 import Scoreboard from '@/components/game/scoreboard/Scoreboard';
@@ -6,6 +6,7 @@ import { ITile } from "@/components/game/Tile";
 import { useRouter } from "next/router";
 import {LobbyContext, LobbyProvider} from "@/context/LobbyContext"
 import io from "socket.io-client";
+import BoardNavbar from "@/components/game/board/BoardNavbar";
 const socket = io('http://localhost:8080'); // todo change me on wierzba
 
 export interface ILobby {
@@ -32,6 +33,7 @@ const GameIndex = () => {
     const playerName = typeof window !== 'undefined' ? localStorage.getItem('playerName') : null;
     const [move, setMove] = useState<IMove[]>([]);
     const [dragged, setDragged] = useState<ITile | null>(null);
+    const [zoomLevel, setZoomLevel] = useState<number>(1);
     let playerId: number;
 
     const resetMove = (move: IMove[], setMove: Dispatch<SetStateAction<IMove[]>>, setRackTiles: Dispatch<SetStateAction<ITile[]>>, setBoardSquares: Dispatch<SetStateAction<(ITile | undefined)[]>>) => {
@@ -60,11 +62,13 @@ const GameIndex = () => {
             )
         }
         setBoardSquares(squares);
+        centerBoard();
     }, [])
 
 
     const fetchLobbyAndTiles = () => {
-    if (!lobbyId) return;
+    if (!lobbyId)
+        return;
 
     fetch(`http://localhost:8080/api/lobby/${lobbyId}`)
         .then(lobbyResponse => {
@@ -90,6 +94,7 @@ const GameIndex = () => {
         })
         .then(tilesData => {
             setRackTiles(tilesData);
+            centerBoard();
         })
         .catch(error => {
             console.error('Error - ', error);
@@ -98,14 +103,44 @@ const GameIndex = () => {
 
     useEffect(() => {
     fetchLobbyAndTiles();
-    socket.on('board_state', fetchLobbyAndTiles)
+    socket.on('board_state', fetchLobbyAndTiles);
 }, [lobbyId, playerName, setLobby, setBoardSquares]);
+
+    const containerRef = useRef(null);
+
+    const centerBoard = (): void => {
+        console.log(containerRef)
+        if (containerRef.current) {
+            const container: HTMLDivElement = containerRef.current;
+            const scrollTop = container.scrollHeight / 2 - container.clientHeight / 2;
+            const scrollLeft = container.scrollWidth / 2 - container.clientWidth / 2;
+            container.scrollTo({ top: scrollTop, left: scrollLeft, behavior: 'smooth' });
+        }
+    }
+    const zoomIn = (): void => {
+        setZoomLevel(zoomLevel + 0.15)
+    };
+
+    const zoomOut = (): void => {
+        if (zoomLevel > 0.7)
+            setZoomLevel(zoomLevel - 0.15)
+    };
+
+    const resetZoom = (): void => {
+        setZoomLevel(1);
+    }
 
     return (
     <div className={"root"}>
         {lobby ? (
-            <div className={"flex flex-row"}>
-                <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles} boardSquares={boardSquares} setBoardSquares={setBoardSquares}/>
+            <div className={"flex"}>
+                 <BoardNavbar
+                onCenter={centerBoard}
+                onZoomIn={zoomIn}
+                onZoomOut={zoomOut}
+                onZoomReset={resetZoom}
+            />
+                <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles} boardSquares={boardSquares} setBoardSquares={setBoardSquares} zoomLevel={zoomLevel} containerRef={containerRef}/>
                 <Scoreboard />
                 <Rack move={move} setMove={setMove} dragged={dragged} setDragged={setDragged} rackTiles={rackTiles} setRackTiles={setRackTiles} setBoardSquares={setBoardSquares} resetMove={() => resetMove(move, setMove, setRackTiles, setBoardSquares)}/>
             </div>

@@ -34,8 +34,8 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
     }
 
     const onDragStart = (e: any, tile: ITile) => {
-        // if (!props.playerTurn)
-        //     return;
+        if (!playerMove)
+            return;
 
         props.setDragged(tile);
         e.dataTransfer.setData("draggedTile", JSON.stringify({tile: tile}));
@@ -46,6 +46,9 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
     }
 
     const onDrop = (e: any, targetTile: any) => {
+        if (!playerMove)
+            return;
+
         e.preventDefault();
 
         let newTiles: ITile[] = props.rackTiles.map(tile => {
@@ -66,7 +69,7 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
         props.setDragged(null);
     };
     console.log(props.rackTiles)
-
+    console.log(playerMove)
     return (
         <div className={"container"}>
             <RackVisibilityButton changeRackVisibility={changeRackVisibility} isRackVisible={isRackVisible}/>
@@ -87,7 +90,7 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
                                         setExchangedTilesList={setExchangedTilesList}/>
                     {props.rackTiles.map((tile, index) => (
                         <Tile
-                            draggable={true}
+                            draggable={playerMove}
                             key={index}
                             tile={tile}
                             onDragStart={onDragStart}
@@ -100,7 +103,7 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
                             extraStyles={'h-8 w-8'}
                         />
                     ))}
-                    <SubmitMoveButton move={props.move} resetMove={props.resetMove} playerMove={playerMove} />
+                    <SubmitMoveButton move={props.move} resetMove={props.resetMove} playerMove={playerMove} setMove={props.setMove} />
                 </div>
             </div>
            }
