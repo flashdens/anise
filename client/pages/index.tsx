@@ -1,8 +1,14 @@
 import WelcomeScreen from "@/components/welcome_screen/WelcomeScreen";
+import Head from "next/head";
 
 const index = () => {
     return (
-        <WelcomeScreen/>
+        <>
+            <Head>
+                <title>anise</title>
+            </Head>
+            <WelcomeScreen/>
+        </>
     )
 }
 

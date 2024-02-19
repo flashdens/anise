@@ -20,7 +20,7 @@ const Scoreboard = () => {
 }
 
     return (
-    <div className="scoreboard w-[20%] h-screen overflow-auto">
+    <div className="scoreboard h-screen">
         {renderScoreboard()}
     </div>
 );

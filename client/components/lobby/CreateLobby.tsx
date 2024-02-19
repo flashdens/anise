@@ -33,11 +33,11 @@ const CreateLobby = ({ }) => {
     };
 
     return (
-        <div className="max-w-md mx-auto my-8 p-6 bg-white rounded-md shadow-md">
+        <div className="max-w-md mx-auto my-8 p-6 border rounded-md shadow-md">
             <h1 className="text-2xl font-bold mb-4 text-center">Create Lobby</h1>
             <input
                 required
-                className="w-full p-2 mb-4 border rounded-md"
+                className="w-full p-2 mb-4 border rounded-md dark:bg-black "
                 type="text"
                 placeholder="Enter Lobby Name"
                 value={lobbyName}
@@ -45,7 +45,7 @@ const CreateLobby = ({ }) => {
             />
             <input
                 required
-                className="w-full p-2 mb-4 border rounded-md"
+                className="w-full p-2 mb-4 border rounded-md dark:bg-black"
                 type="text"
                 placeholder="Enter Your Name"
                 value={playerName}

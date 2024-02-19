@@ -9,24 +9,25 @@ interface BoardNavbarProps {
 
 const BoardNavbar: React.FC<BoardNavbarProps> = (props: BoardNavbarProps) => {
   return (
-      <div className={"bg-gray-500"}>
-          <button onClick={props.onCenter}>
+      <div className="bg-gray-100 dark:bg-gray-600 space-y-4 p-5 flex flex-col items-center">
+          <button className="flex items-center justify-center gap-2" onClick={props.onCenter}>
               <img src='/buttons/game/board_navbar/center.svg' height={20} width={20} alt=""/>
-                Center board
+              Center board
           </button>
-          <button onClick={props.onZoomIn}>
+          <button className="flex items-center justify-center gap-2" onClick={props.onZoomIn}>
               <img src='/buttons/game/board_navbar/zoom-in.svg' height={20} width={20} alt=""/>
-                Zoom in
+              Zoom in
           </button>
-          <button onClick={props.onZoomOut}>
+          <button className="flex items-center justify-center gap-2" onClick={props.onZoomOut}>
               <img src='/buttons/game/board_navbar/zoom-out.svg' height={20} width={20} alt=""/>
-                Zoom out
+              Zoom out
           </button>
-          <button onClick={props.onZoomReset}>
+          <button className="flex items-center justify-center gap-2" onClick={props.onZoomReset}>
               <img src='/buttons/game/board_navbar/zoom-reset.svg' height={20} width={20} alt=""/>
-                Reset zoom
+              Reset zoom
           </button>
-        </div>
+      </div>
+
   );
 }
 

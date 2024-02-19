@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Head from "next/head";
 
 const Index = () => {
     const [playerName, setPlayerName] = useState(typeof window !== 'undefined' ? localStorage.getItem('playerName') : '');
@@ -47,26 +48,28 @@ const Index = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto my-8 p-6 bg-white rounded-md shadow-md">
-            <h1 className="text-2xl font-bold mb-4 text-center">Join Lobby</h1>
-            <form onSubmit={handleJoinLobby}>
-                <label className="block mb-2 text-sm font-bold text-gray-700">
-                    Enter your name:
-                </label>
-                <input
-                    type="text"
-                    name="playerName"
-                    className="w-full p-2 mb-4 border rounded-md"
-                    placeholder="Your Name"
-                />
-                <button
-                    type="submit"
-                    className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                >
-                    Join Lobby
-                </button>
-            </form>
-        </div>
+        <>
+            <Head>
+                <title>Join Lobby</title>
+            </Head>
+            <div className="max-w-md mx-auto my-8 p-6 border rounded-md shadow-md">
+                <h1 className="text-2xl font-bold mb-4 text-center">Join Lobby</h1>
+                <form onSubmit={handleJoinLobby}>
+
+                    <input
+                        type="text"
+                        name="playerName"
+                        className="w-full p-2 mb-4 border rounded-md dark:bg-black"
+                        placeholder="Enter your name"/>
+                    <button
+                        type="submit"
+                        className="w-full p-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                    >
+                        Join Lobby
+                    </button>
+                </form>
+            </div>
+        </>
     );
 };
 

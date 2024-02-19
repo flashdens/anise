@@ -55,7 +55,7 @@ const Index = () => {
             </Head>
 
             <div className="p-4">
-                <div className="container flex flex-col justify-between items-center border text-center max-w-lg mx-auto">
+                <div className="container flex flex-col justify-between items-center  text-center max-w-lg mx-auto">
                     {lobby ?
                         <LobbyScreen
                             isLobbyAdmin={typeof window !== 'undefined' ? localStorage.getItem('playerName') === lobby.host : false}

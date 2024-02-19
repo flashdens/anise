@@ -51,14 +51,14 @@ class Game:
     def process_move(self, received_move):
         move = Move(received_move)
         Move.construct_move(move, received_move)
+        self.board.make_move(move.move)
 
         if not Move.is_combination_valid(move, move.move):
             return {"message": "invalid move! invalid combination"}, 0
         else:
             message, success = Move.is_move_valid_on_board(move, self.board)
-            if success:
-                self.board.make_move(move.move)
-            else:
+            if not success:
+                self.board.undo_move(move.move)
                 return message, 0
 
         message, move_score = self.board.calculate_points(move.move)

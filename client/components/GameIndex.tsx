@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import {LobbyContext, LobbyProvider} from "@/context/LobbyContext"
 import io from "socket.io-client";
 import BoardNavbar from "@/components/game/board/BoardNavbar";
+import Head from "next/head";
 const socket = io('http://localhost:8080'); // todo change me on wierzba
 
 export interface ILobby {
@@ -73,7 +74,8 @@ const GameIndex = () => {
     fetch(`http://localhost:8080/api/lobby/${lobbyId}`)
         .then(lobbyResponse => {
             if (!lobbyResponse.ok) {
-               router.push('/lobby')
+               router.push('/lobby');
+               return;
             }
             return lobbyResponse.json();
         })
@@ -131,23 +133,32 @@ const GameIndex = () => {
     }
 
     return (
-    <div className={"root"}>
-        {lobby ? (
-            <div className={"flex"}>
-                 <BoardNavbar
-                onCenter={centerBoard}
-                onZoomIn={zoomIn}
-                onZoomOut={zoomOut}
-                onZoomReset={resetZoom}
-            />
-                <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged} setRackTiles={setRackTiles} boardSquares={boardSquares} setBoardSquares={setBoardSquares} zoomLevel={zoomLevel} containerRef={containerRef}/>
-                <Scoreboard />
-                <Rack move={move} setMove={setMove} dragged={dragged} setDragged={setDragged} rackTiles={rackTiles} setRackTiles={setRackTiles} setBoardSquares={setBoardSquares} resetMove={() => resetMove(move, setMove, setRackTiles, setBoardSquares)}/>
+        <>
+            <Head>
+                <title>Game</title>
+            </Head>
+            <div className={"root"}>
+                {lobby ? (
+                    <div className={"flex flex-row gap-10"}>
+                        <BoardNavbar
+                            onCenter={centerBoard}
+                            onZoomIn={zoomIn}
+                            onZoomOut={zoomOut}
+                            onZoomReset={resetZoom}/>
+                        <BoardContainer move={move} setMove={setMove} setDragged={setDragged} dragged={dragged}
+                                        setRackTiles={setRackTiles} boardSquares={boardSquares}
+                                        setBoardSquares={setBoardSquares} zoomLevel={zoomLevel}
+                                        containerRef={containerRef}/>
+                        <Scoreboard/>
+                        <Rack move={move} setMove={setMove} dragged={dragged} setDragged={setDragged}
+                              rackTiles={rackTiles} setRackTiles={setRackTiles} setBoardSquares={setBoardSquares}
+                              resetMove={() => resetMove(move, setMove, setRackTiles, setBoardSquares)}/>
+                    </div>
+                ) : (
+                    <div>Loading...</div>
+                )}
             </div>
-        ) : (
-            <div>Loading...</div>
-        )}
-    </div>
+        </>
 );
 };
 

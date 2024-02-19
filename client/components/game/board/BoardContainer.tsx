@@ -10,6 +10,7 @@ import BoardNavbar from "@/components/game/board/BoardNavbar";
 import assert from "assert";
 import io from "socket.io-client";
 import {LobbyContext} from "@/context/LobbyContext";
+import boardNavbar from "@/components/game/board/BoardNavbar";
 const socket = io('http://localhost:8080');
 
 export interface IMove {
@@ -104,8 +105,7 @@ const handleBoardState = (boardState: ITile[][]) => {
         const tileData = JSON.parse(e.dataTransfer.getData("draggedTile"));
         const positionIndex: number = y * 51 + x;
 
-        if (props.boardSquares[positionIndex]) {
-            console.log("[debug] a tile is already there");
+        if (props.boardSquares[positionIndex] != undefined) {
             return;
         }
 
@@ -142,10 +142,6 @@ const handleBoardState = (boardState: ITile[][]) => {
         e.preventDefault();
     }
 
-
-
-
-
     const renderBoard = () => {
     return props.boardSquares.map((tile: ITile | undefined, index: React.Key | null | undefined) => {
         const isTileInMove = props.move.some(moveItem => moveItem.i === index);
@@ -154,7 +150,7 @@ const handleBoardState = (boardState: ITile[][]) => {
                 <Tile
                     i={index}
                     key={index}
-                    extraStyles={index === 1300 ? 'font-extrabold bg-cyan-100' : ''}
+                    extraStyles={index === 1300 ? 'font-extrabold bg-cyan-100 dark:bg-cyan-900' : ''}
                     isOnRack={false}
                     onDrop={onDrop}
                     onDragOver={onDragOver}
@@ -166,11 +162,10 @@ const handleBoardState = (boardState: ITile[][]) => {
                 </Tile>
         );
     });
-};;
-
+};
   return (
-      <div className="flex items-center h-screen w-[70%]">
-        <div className="board-container flex-grow h-[75%] overflow-scroll"
+    <div className="flex items-start h-screen w-[70%]">
+        <div className="board-container flex-grow h-[70%] overflow-scroll mt-12"
                 ref={props.containerRef}
         >
             <div
@@ -178,8 +173,8 @@ const handleBoardState = (boardState: ITile[][]) => {
                 {renderBoard()}
             </div>
         </div>
-      </div>
-  );
+    </div>
+);
 };
 
 

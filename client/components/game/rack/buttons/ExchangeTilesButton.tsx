@@ -17,7 +17,7 @@ const ResetMoveButton: React.FC<ExchangeTilesButton> = (props: ExchangeTilesButt
         console.log(props.isExchangingTiles);
     }
     return (
-        <button className="px-4 py-1 text-xs transition-colors duration-300 rounded-full shadow-xl text-white bg-purple-500 hover:bg-purple-600 shadow-purple-200 disabled:bg-purple-200"
+        <button className="px-4 py-1 text-xs transition-colors duration-300 rounded-full shadow-xl text-white bg-purple-500 hover:bg-purple-600 shadow-purple-200 dark:shadow-none disabled:bg-purple-200"
                 onClick={toggleTileExchange}
                 disabled={!props.playerMove}>
             { !props.isExchangingTiles ? "exchange tiles" : "cancel tile exchange"}

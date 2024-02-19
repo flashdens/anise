@@ -31,12 +31,12 @@ const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
         if (data.lobby_id === props.lobby.id) {
             router.push(`/game/${data.lobby_id}`);
         }
+    });
 
-        socket.on('player_joined', () => {
+     socket.on('player_joined', () => {
             location.reload();
-        });
-
-    }), [props.lobby.id, router];
+        })
+     , [props.lobby.id, router];
 
     return () => {
         socket.off('game_started');
@@ -52,7 +52,7 @@ const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
             <ul>
                 {players.map((player: any, index: number) => (
                     <li key={index} className={`mb-2 flex items-center text-center  ${player.name == playerName ? 'bg-green-300' : ''}`}>
-                        <span className={"text-center dark:text-black"}>{player.name}</span>
+                        <span className={"text-center"}>{player.name}</span>
                     </li>
                 ))}
             </ul>

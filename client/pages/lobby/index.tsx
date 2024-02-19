@@ -5,7 +5,7 @@ const index = () => {
     return (
     <>
       <Head>
-        <title>Game Lobby</title>
+        <title>Lobby List</title>
       </Head>
 
         <div className="p-4">

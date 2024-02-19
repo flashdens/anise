@@ -15,6 +15,9 @@ class GameBoard:
     def place_tile(self, tile, row, col) -> None:
         self.board[row][col] = tile
 
+    def remove_tile(self, row, col) -> None:
+        self.board[row][col] = None
+
     def score_combination(self, x, y, is_horizontal):
         combination_len = 0
 
@@ -74,3 +77,9 @@ class GameBoard:
         for key, value in move.items():
             row, col = key[0], key[1]
             self.place_tile(value, row, col)
+
+    def undo_move(self, move):
+        for key, value in move.items():
+            row, col = key[0], key[1]
+            self.remove_tile(row, col)
+
