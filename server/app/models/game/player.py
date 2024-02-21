@@ -1,7 +1,7 @@
 import random
-import server.app.models.game.bag
-from server.app.models.game.move import Move
-from server.app.models.game.tile import Tile
+import models.game.bag
+from models.game.move import Move
+from models.game.tile import Tile
 
 
 class Player:
@@ -12,18 +12,13 @@ class Player:
         self.rack = []
 
     def draw_tile(self, bag):
-        print(len(bag.content))
         self.rack.append(bag.content.pop())
-
 
     def rack_to_dict(self):
         return [tile.to_dict() for tile in self.rack]
-
 
     def to_dict(self):
         return {
             'name': self.name,
             'score': self.score
         }
-
-

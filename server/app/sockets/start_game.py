@@ -1,5 +1,5 @@
 from __main__ import socketio
-from server.app.models.lobby.lobby import lobbies
+from models.lobby.lobby import lobbies
 from flask_socketio import emit
 
 

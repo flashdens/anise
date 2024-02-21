@@ -1,6 +1,6 @@
 from flask import jsonify, session
 from __main__ import app
-from server.app.models.lobby.lobby import lobbies
+from models.lobby.lobby import lobbies
 
 
 @app.route('/api/lobby/<int:lobby_id>', methods=['GET'])

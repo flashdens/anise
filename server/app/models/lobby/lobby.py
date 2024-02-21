@@ -1,4 +1,4 @@
-from server.app.models.game.game import Game
+from models.game.game import Game
 
 lobbies = []
 

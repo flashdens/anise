@@ -1,9 +1,9 @@
 from enum import Enum
 
-from server.app.models.game.bag import Bag
-from server.app.models.game.board import GameBoard
-from server.app.models.game.move import Move
-from server.app.models.game.player import Player
+from models.game.bag import Bag
+from models.game.board import GameBoard
+from models.game.move import Move
+from models.game.player import Player
 
 
 class Status(Enum):

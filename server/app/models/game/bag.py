@@ -1,6 +1,6 @@
 import random
 
-from server.app.models.game.tile import Tile
+from models.game.tile import Tile
 
 possible_symbols = ['A', 'B', 'C', 'D', 'E', 'F']
 possible_colors = ['red', 'green', 'yellow', 'blue', 'purple', 'cyan']

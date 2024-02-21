@@ -1,8 +1,8 @@
 from flask import request, jsonify
 from __main__ import app, socketio
 
-from server.app.models.game.player import Player
-from server.app.models.lobby.lobby import lobbies
+from models.game.player import Player
+from models.lobby.lobby import lobbies
 
 
 def lobby_exists(searched_lobby_id):

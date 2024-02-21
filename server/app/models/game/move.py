@@ -1,7 +1,7 @@
 from shutil import move
 
-from server.app.models.game.tile import Tile
-from server.app.models.game.board import BOARD_SIZE
+from models.game.tile import Tile
+from models.game.board import BOARD_SIZE
 
 
 class Move:
@@ -72,6 +72,7 @@ class Move:
 
         row_len = abs(last_tile_row - first_tile_row)
 
+        # there might be a bug, if len == 1 i should try looking both sides
         is_horizontal_move = True if row_len == 0 else False
         neighbour_found = False
 

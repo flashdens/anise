@@ -2,6 +2,9 @@ from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 
+import sys
+sys.path.append('/home/miloszek/PycharmProjects/anise/server/app')
+
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins='http://localhost:3000')

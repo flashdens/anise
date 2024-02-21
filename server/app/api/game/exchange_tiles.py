@@ -1,10 +1,10 @@
 from flask import jsonify, redirect, url_for, request
 from __main__ import app
 
-from server.app.models.game.tile import Tile
-from server.app.models.lobby.lobby import lobbies
+from models.game.tile import Tile
+from models.lobby.lobby import lobbies
 
-from server.app.socketio.update_board_state import update_board_state
+from sockets.update_board_state import update_board_state
 
 @app.route('/api/game/<int:lobby_id>/exchange_tiles/<int:player_id>', methods=['POST'])
 def exchange_tiles(lobby_id, player_id):

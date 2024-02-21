@@ -1,7 +1,7 @@
 from flask import jsonify, request, session
 from __main__ import app
-from server.app.models.lobby.lobby import lobbies
-from server.app.socketio.update_board_state import update_board_state
+from models.lobby.lobby import lobbies
+from sockets.update_board_state import update_board_state
 
 
 @app.route('/api/game/send_move/lobby/<int:lobby_id>/player/<int:player_num>', methods=['POST'])

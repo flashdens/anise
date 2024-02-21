@@ -1,6 +1,6 @@
 from flask import jsonify
 from __main__ import app
-from server.app.models.lobby.lobby import lobbies
+from models.lobby.lobby import lobbies
 
 
 @app.route('/api/game/<int:lobby_id>/get_tiles/<int:player_id>/', methods=['GET'])

@@ -1,4 +1,4 @@
-from server.app.models.game.tile import Tile
+from models.game.tile import Tile
 
 BOARD_SIZE = 51
 
