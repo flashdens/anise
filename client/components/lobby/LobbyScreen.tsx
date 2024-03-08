@@ -26,8 +26,6 @@ const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
     useEffect(() => {
     socket.on('game_started', (data: any) => {
         console.log("maybe?")
-        console.log(data.lobby_id);
-        console.log(props.lobby.id);
         if (data.lobby_id === props.lobby.id) {
             router.push(`/game/${data.lobby_id}`);
         }
@@ -40,7 +38,8 @@ const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
 
     return () => {
         socket.off('game_started');
-        socket.off('player_joined')
+        socket.off('player_joined');
+
     };
 
 }, [props.lobby.id, router]);

@@ -1,4 +1,3 @@
-from shutil import move
 
 from models.game.tile import Tile
 from models.game.board import BOARD_SIZE
@@ -6,11 +5,11 @@ from models.game.board import BOARD_SIZE
 
 class Move:
 
-    def __init__(self, received_move):
+    def __init__(self):
         self.move = {}
         self.is_move_valid = False
 
-    def construct_move(self, received_move):
+    def construct_move_from_json(self, received_move):
         for tile in received_move:
             i = int(tile['i'])
             x = tile['i'] // BOARD_SIZE
@@ -19,8 +18,7 @@ class Move:
 
     def is_combination_valid(self, move):
         if len(move) == 0:
-            self.is_move_valid = True
-            return self.is_move_valid
+            assert False  # no move submitted to this method should be empty
 
         seen_tiles = set()
         for tile in move.values():
@@ -36,31 +34,41 @@ class Move:
 
         return self.is_move_valid
 
-    def construct_line(self, x, y, is_horizontal, board):
-        entry_line = Move([]).move
+    def construct_line(self, entry_x, entry_y, is_horizontal, board):
+        entry_line = Move().move
+        entry_line[(entry_x, entry_y)] = board[entry_x][entry_y]
+
+        x = entry_x
+        y = entry_y
 
         if not is_horizontal:
-            while board.board[x][y] is not None:
-                entry_line[(x, y)] = board.board[x][y]
+            while board[x + 1][y] is not None:
+                entry_line[(x + 1, y)] = board[x + 1][y]
                 x = x + 1
         else:
-            while board.board[x][y] is not None:
-                entry_line[(x, y)] = board.board[x][y]
+            while board[x][y + 1] is not None:
+                entry_line[(x, y + 1)] = board[x][y + 1]
                 y = y + 1
 
-        if not entry_line:
-            if not is_horizontal:
-                while board.board[x][y] is not None:
-                    entry_line[(x, y)] = board.board[x][y]
-                    x = x - 1
-            else:
-                while board.board[x][y] is not None:
-                    entry_line[(x, y)] = board.board[x][y]
-                    y = y - 1
+        x = entry_x
+        y = entry_y
+
+        if not is_horizontal:
+            while board[x - 1][y] is not None:
+                entry_line[(x - 1, y)] = board[x - 1][y]
+                x = x - 1
+        else:
+            while board[x][y - 1] is not None:
+                entry_line[(x, y - 1)] = board[x][y - 1]
+                y = y - 1
 
         return entry_line
 
     def is_move_valid_on_board(self, board):
+        if len(self.move) == 0:
+            return {'message': "A move can't be empty!"}, False
+
+
         first_tile = list(self.move.items())[0]
         last_tile = list(self.move.items())[-1]
 
@@ -88,7 +96,7 @@ class Move:
         entry_line = self.construct_line(first_tile_row,
                                          first_tile_col,
                                          is_horizontal_move,
-                                         board)
+                                         board.board)
 
         if len(entry_line) - len(self.move) > 0:
             neighbour_found = True
@@ -100,7 +108,7 @@ class Move:
             insert_line = self.construct_line(coords[0],
                                               coords[1],
                                               not is_horizontal_move,
-                                              board)
+                                              board.board)
 
             if not self.is_combination_valid(insert_line):
                 return {'message': "Insertion is not valid!"}, False
@@ -111,7 +119,7 @@ class Move:
         if board.empty:
             board.empty = False
             return {'message': "move is valid!"}, True
-        # elif not neighbour_found:
-        #     return {'message': "tiles in your move must be adjacent to at least one tile!"}, False
+        elif not neighbour_found:
+            return {'message': "tiles in your move must be adjacent to at least one tile!"}, False
         else:
             return {'message': "move is valid!"}, True

@@ -38,7 +38,6 @@ const Index = () => {
                 return response.json();
             })
             .then((data) => {
-                console.log("set!")
                 localStorage.setItem("playerName", enteredName);
                 router.push(`/lobby/${lobbyId}`);
             })

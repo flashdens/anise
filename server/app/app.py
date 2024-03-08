@@ -6,7 +6,7 @@ import sys
 sys.path.append('/home/miloszek/PycharmProjects/anise/server/app')
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 socketio = SocketIO(app, cors_allowed_origins='http://localhost:3000')
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
 
@@ -17,5 +17,4 @@ app.secret_key = 'ilovemaciejgodny'
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", debug=True, port=8080)
     socketio.run(app, port=8080, debug=True, allow_unsafe_werkzeug=True)

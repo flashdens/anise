@@ -43,7 +43,6 @@ const SubmitMoveButton: React.FC<SubmitMoveButtonProps> = (props: SubmitMoveButt
         props.setMove([]);
     }
 
-    console.log(responseData);
 })
     .catch(error => {
       showMessage(`An error occurred: ${error.message}`, 'error'); // Display flash message for network errors

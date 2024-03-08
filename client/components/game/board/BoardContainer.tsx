@@ -125,7 +125,6 @@ const handleBoardState = (boardState: ITile[][]) => {
         }
 
         props.setMove((prevMove: IMove[]) => [...prevMove, currentMove]);
-        console.log(props.move);
 
         if (!props.dragged)
             assert(false);

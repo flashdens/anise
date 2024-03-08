@@ -49,12 +49,12 @@ class Game:
                 player.draw_tile(self.bag)
 
     def process_move(self, received_move):
-        move = Move(received_move)
-        Move.construct_move(move, received_move)
+        move = Move()
+        Move.construct_move_from_json(move, received_move)
         self.board.make_move(move.move)
 
         if not Move.is_combination_valid(move, move.move):
-            return {"message": "invalid move! invalid combination"}, 0
+            return {"message": "invalid combination"}, 0
         else:
             message, success = Move.is_move_valid_on_board(move, self.board)
             if not success:

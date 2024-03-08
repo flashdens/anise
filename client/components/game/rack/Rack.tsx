@@ -68,8 +68,6 @@ export const Rack: React.FC<RackProps> = (props: RackProps) => {
         props.setRackTiles(newTiles);
         props.setDragged(null);
     };
-    console.log(props.rackTiles)
-    console.log(playerMove)
     return (
         <div className={"container"}>
             <RackVisibilityButton changeRackVisibility={changeRackVisibility} isRackVisible={isRackVisible}/>
