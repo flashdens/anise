@@ -27,7 +27,6 @@ interface TileProps {
 const Tile: React.FC<TileProps> = (props: TileProps) => {
 
     const toggleTileForExchange = (tile: ITile) => {
-        console.log(props.exchangedTilesList);
         props.setExchangedTilesList(currentList => {
             if (currentList.includes(props.tile)) {
                 // If it is, remove it from the list

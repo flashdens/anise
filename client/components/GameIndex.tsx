@@ -69,7 +69,6 @@ const GameIndex = () => {
 
 
     const getWinner = () : IPlayer => {
-        console.log(lobby)
         return lobby.players.reduce((highest, player) => {
             return (highest.score > player.score) ? highest : player;
         }, lobby.players[0]);
@@ -118,7 +117,6 @@ const GameIndex = () => {
     const containerRef = useRef(null);
 
     const centerBoard = (): void => {
-        console.log(containerRef)
         if (containerRef.current) {
             const container: HTMLDivElement = containerRef.current;
             const scrollTop = container.scrollHeight / 2 - container.clientHeight / 2;

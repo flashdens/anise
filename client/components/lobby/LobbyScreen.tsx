@@ -19,13 +19,11 @@ const LobbyScreen: React.FC<LobbyScreenProps> = (props: LobbyScreenProps) => {
     };
 
     const handleStartGame = () => {
-        console.log(props.lobby.id)
         socket.emit('start_game', props.lobby.id);
     };
 
     useEffect(() => {
     socket.on('game_started', (data: any) => {
-        console.log("maybe?")
         if (data.lobby_id === props.lobby.id) {
             router.push(`/game/${data.lobby_id}`);
         }

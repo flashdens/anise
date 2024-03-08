@@ -22,7 +22,6 @@ const LobbyList = () => {
                .catch((error: Error) => {
                    console.error('Error - ', error)
                });
-           console.log(lobbies)
        }, []);
 
     return (

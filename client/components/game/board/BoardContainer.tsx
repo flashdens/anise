@@ -86,8 +86,7 @@ const handleBoardState = (boardState: ITile[][]) => {
         e.preventDefault();
         const droppedOn: HTMLElement = e.target as HTMLElement;
 
-        if (!droppedOn.hasAttribute('i')) {
-            console.log("[debug] the tile was dropped off-board")
+        if (!droppedOn.hasAttribute('i')) { // tile was dropped on an another tile
             return;
         }
 
@@ -96,8 +95,7 @@ const handleBoardState = (boardState: ITile[][]) => {
         const x: number|null = i % 51;
         const y: number|null = Math.floor(i / 51);
 
-        if (x == null || y == null) {
-            console.log("[debug] tile has no coordinates")
+        if (x == null || y == null) { // tile was dropped on the rack
             return;
         }
 

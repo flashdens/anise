@@ -19,7 +19,6 @@ const CreateLobby = ({ }) => {
             },
             body: JSON.stringify({"lobbyName": lobbyName, "playerName": playerName}),
         }).then((response) => {
-            console.log(response)
             if (!response.ok) {
                 throw new Error('Failed to create lobby');
             }

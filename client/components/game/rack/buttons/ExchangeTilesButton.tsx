@@ -14,7 +14,6 @@ const ResetMoveButton: React.FC<ExchangeTilesButton> = (props: ExchangeTilesButt
     const toggleTileExchange = () => {
         props.setIsExchangingTiles(!props.isExchangingTiles);
         props.setExchangedTilesList([]);
-        console.log(props.isExchangingTiles);
     }
     return (
         <button className="px-4 py-1 text-xs transition-colors duration-300 rounded-full shadow-xl text-white bg-purple-500 hover:bg-purple-600 shadow-purple-200 dark:shadow-none disabled:bg-purple-200"

@@ -15,7 +15,6 @@ const SubmitMoveButton: React.FC<SubmitTileExchangeButtonProps> = (props: Submit
     const playerName = typeof window !== 'undefined' ? localStorage.getItem('playerName'): null;
     const playerId: number = lobby.players.findIndex((p) => p.name === playerName);
     const submitTileExchange = (tiles: ITile[]) => {
-        console.log(props.exchangedTilesList)
         fetch(`http://localhost:8080/api/game/${lobby.id}/exchange_tiles/${playerId}`,
              {
                  method: 'POST',
