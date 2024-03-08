@@ -19,7 +19,7 @@ installed.
 ## To set up the server application:
 1. Go to the *server* directory of the project
 2. Install the project dependencies: ``pip install -r requirements.txt`` 
-3. Run the application: ``python3.11 app.py``
+3. Run the application: ``python3.11 app/app.py``
 
 ## To set up the client application:
 1. Go to the *client* directory of the project
