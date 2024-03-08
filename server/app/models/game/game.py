@@ -75,7 +75,3 @@ class Game:
 
             return message, move_score
 
-    def game_loop(self):  # todo wtf is that name
-        while not self.game_over():
-            for player in self.players:
-                player.make_move()

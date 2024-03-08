@@ -8,6 +8,7 @@ import {LobbyContext, LobbyProvider} from "@/context/LobbyContext"
 import io from "socket.io-client";
 import BoardNavbar from "@/components/game/board/BoardNavbar";
 import Head from "next/head";
+import GameOverPopup from "@/components/game/GameOverPopup";
 const socket = io('http://localhost:8080'); // todo change me on wierzba
 
 export interface ILobby {
@@ -15,6 +16,7 @@ export interface ILobby {
     host: string;
     id: number;
     name: string;
+    gameStatus: number;
     players: IPlayer[];
     toMove: number;
 }
@@ -35,7 +37,6 @@ const GameIndex = () => {
     const [move, setMove] = useState<IMove[]>([]);
     const [dragged, setDragged] = useState<ITile | null>(null);
     const [zoomLevel, setZoomLevel] = useState<number>(1);
-    let playerId: number;
 
     const resetMove = (move: IMove[], setMove: Dispatch<SetStateAction<IMove[]>>, setRackTiles: Dispatch<SetStateAction<ITile[]>>, setBoardSquares: Dispatch<SetStateAction<(ITile | undefined)[]>>) => {
         setRackTiles(prevRackTiles => {
@@ -67,6 +68,13 @@ const GameIndex = () => {
     }, [])
 
 
+    const getWinner = () : IPlayer => {
+        console.log(lobby)
+        return lobby.players.reduce((highest, player) => {
+            return (highest.score > player.score) ? highest : player;
+        }, lobby.players[0]);
+        }
+
     const fetchLobbyAndTiles = () => {
     if (!lobbyId)
         return;
@@ -82,7 +90,6 @@ const GameIndex = () => {
         .then(lobbyData => {
             setLobby(lobbyData);
             const playerId = lobbyData.players.findIndex((p) => p.name === playerName);
-            console.log(playerId    )
             if (playerId === -1) {
                 throw new Error("Player not found in lobby");
             }
@@ -140,6 +147,7 @@ const GameIndex = () => {
             <div className={"root"}>
                 {lobby ? (
                     <div className={"flex flex-row gap-10"}>
+                {lobby.gameStatus === 3 ? <GameOverPopup winner={getWinner()} /> : <></>}
                         <BoardNavbar
                             onCenter={centerBoard}
                             onZoomIn={zoomIn}
